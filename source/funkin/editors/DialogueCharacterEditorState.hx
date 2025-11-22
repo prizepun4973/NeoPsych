@@ -36,6 +36,7 @@ import sys.io.File;
 #end
 
 import funkin.menu.TitleState;
+import funkin.editors.widget.*;
 
 using StringTools;
 
@@ -676,7 +677,7 @@ class DialogueCharacterEditorState extends MusicBeatState
 			}
 
 			if(FlxG.keys.justPressed.ESCAPE) {
-				MusicBeatState.switchState(new funkin.editors.MasterEditorMenu());
+				MusicBeatState.switchState(new funkin.menu.MainMenuState());
 				FlxG.sound.playMusic(Paths.music('freakyMenu'), 1);
 				transitioning = true;
 			}

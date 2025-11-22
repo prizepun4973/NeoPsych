@@ -1,4 +1,4 @@
-package funkin.editors;
+package funkin.menu;
 
 #if desktop
 import Discord.DiscordClient;
@@ -18,6 +18,7 @@ import sys.FileSystem;
 
 import funkin.component.*;
 import funkin.game.component.Character;
+import funkin.editors.*;
 
 using StringTools;
 

@@ -1,4 +1,4 @@
-package funkin.editors;
+package funkin.editors.jit;
 
 #if LUA_ALLOWED
 import llua.Lua;

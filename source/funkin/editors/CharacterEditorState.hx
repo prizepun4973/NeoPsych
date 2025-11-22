@@ -37,6 +37,8 @@ import flixel.animation.FlxAnimation;
 
 import funkin.menu.TitleState;
 
+import funkin.editors.widget.*;
+
 #if MODS_ALLOWED
 import sys.FileSystem;
 #end
@@ -1125,7 +1127,7 @@ class CharacterEditorState extends MusicBeatState
 				if(goToPlayState) {
 					MusicBeatState.switchState(new PlayState());
 				} else {
-					MusicBeatState.switchState(new funkin.editors.MasterEditorMenu());
+					MusicBeatState.switchState(new funkin.menu.MainMenuState());
 					FlxG.sound.playMusic(Paths.music('freakyMenu'));
 				}
 				FlxG.mouse.visible = false;

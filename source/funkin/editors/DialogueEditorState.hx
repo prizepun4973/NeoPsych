@@ -359,7 +359,7 @@ class DialogueEditorState extends MusicBeatState
 				reloadText(false);
 			}
 			if(FlxG.keys.justPressed.ESCAPE) {
-				MusicBeatState.switchState(new funkin.editors.MasterEditorMenu());
+				MusicBeatState.switchState(new funkin.menu.MainMenuState());
 				FlxG.sound.playMusic(Paths.music('freakyMenu'), 1);
 				transitioning = true;
 			}

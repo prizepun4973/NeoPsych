@@ -18,7 +18,6 @@ import flixel.tweens.FlxTween;
 import flixel.util.FlxColor;
 import lime.app.Application;
 
-import funkin.editors.MasterEditorMenu;
 import flixel.input.keyboard.FlxKey;
 
 import funkin.jit.BuiltinJITState;
@@ -276,7 +275,7 @@ class MainMenuState extends BuiltinJITState
 			else if (FlxG.keys.anyJustPressed(debugKeys))
 			{
 				selectedSomethin = true;
-				MusicBeatState.switchState(new MasterEditorMenu());
+				MusicBeatState.switchState(new funkin.menu.MasterEditorMenu());
 			}
 			#end
 		}

@@ -59,6 +59,8 @@ import funkin.game.component.*;
 import Song.SwagSong;
 import funkin.game.data.Section.SwagSection;
 
+import funkin.editors.widget.*;
+
 @:access(flixel.sound.FlxSound._sound)
 @:access(openfl.media.Sound.__buffer)
 
@@ -1702,7 +1704,7 @@ class ChartingState extends MusicBeatState
 
 			if (FlxG.keys.justPressed.BACKSPACE) {
 				PlayState.chartingMode = false;
-				MusicBeatState.switchState(new funkin.editors.MasterEditorMenu());
+				MusicBeatState.switchState(new funkin.menu.MainMenuState());
 				FlxG.sound.playMusic(Paths.music('freakyMenu'));
 				FlxG.mouse.visible = false;
 				return;
