@@ -35,16 +35,18 @@ using StringTools;
 
 class OptionsState extends BuiltinJITState
 {
-	var options:Array<String> = ['Controls', 'Adjust Delay and Combo', 'Graphics', 'Gameplay', 'Mods'];
+	var options:Array<String> = ['Controls', 'Graphics', 'Gameplay', 'Mods'];
 	private var grpOptions:FlxTypedGroup<Alphabet>;
 	private static var curSelected:Int = 0;
 	public static var menuBG:FlxSprite;
 
-	private var parent:FlxState;
+	public var parent:FlxState;
+	public static var INSTANCE:OptionsState;
 
 	public function new(parent:FlxState) {
 		super("OptionsState");
 		this.parent = parent;
+		INSTANCE = this;
 	}
 
 	function openSelectedSubstate(label:String) {
@@ -55,8 +57,6 @@ class OptionsState extends BuiltinJITState
 				openSubState(new GraphicsSettingsSubState());
 			case 'Gameplay':
 				openSubState(new GameplaySettingsSubState());
-			case 'Adjust Delay and Combo':
-				LoadingState.loadAndSwitchState(new NoteOffsetState(parent));
 			case 'Mods':
 				LoadingState.loadAndSwitchState(new ModsMenuState(parent));
 		}
