@@ -70,7 +70,7 @@ class ChartEditorState extends BuiltinJITState {
 
     private var textPanel:FlxText;
     public var crosshair:Crosshair;
-    public var selections:Array<GuiElement> = new Array();
+    public var selected:Array<GuiElement> = new Array();
     
     public static function reset() {
         lastPos = 0;
@@ -301,7 +301,7 @@ class ChartEditorState extends BuiltinJITState {
                 vocals.play();
                 vocals.pause();
 			}
-            // curSec = -1;
+            curSec = -1;
 		};
 
         /*
@@ -387,10 +387,7 @@ class ChartEditorState extends BuiltinJITState {
             System
         */
         if (Conductor.songPosition < 0) Conductor.songPosition = 0;
-        if (Conductor.songPosition >= FlxG.sound.music.length && !paused) {
-            Conductor.songPosition = FlxG.sound.music.length;
-            pause();
-        }
+        if (Conductor.songPosition >= FlxG.sound.music.length) Conductor.songPosition = FlxG.sound.music.length;
         if (!paused) Conductor.songPosition = FlxG.sound.music.time;
 
         if (renderNotes.members.length <= 0) updateCurSec();
@@ -404,7 +401,7 @@ class ChartEditorState extends BuiltinJITState {
         sectionStopLine.y = Y_OFFSET - (songPos - nextUpdateTime) * GRID_SIZE / Conductor.crochet * 4;
 
         textPanel.text = 
-            Std.string(FlxStringUtil.formatTime(Conductor.songPosition / 1000, true)) + " / " + Std.string(FlxStringUtil.formatTime(FlxG.sound.music.length / 1000, true)) +
+            FlxStringUtil.formatTime(Conductor.songPosition / 1000, true) + " / " + FlxStringUtil.formatTime(FlxG.sound.music.length / 1000, true) + " (" + Std.string(FlxMath.roundDecimal(Conductor.songPosition / 1000, 2)) + ")" +
 		    "\nBeat: " + curBeat + " | Step: " + curStep + 
             "\nSection: " + curSec + " (Beats: " + _song.notes[curSec].sectionBeats + ", BPM: " + sectionBPM[curSec] + ")";
 
