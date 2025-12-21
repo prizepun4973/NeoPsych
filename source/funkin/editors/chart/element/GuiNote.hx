@@ -14,8 +14,6 @@ class GuiNote extends GuiElement{
     public var susTail:FlxSprite;
     public var typeTxt:FlxText;
 
-    public var relatedAction:NoteAddAction;
-
     public function new(strumTime:Float, noteData:Int, susLength, relatedAction = null) {
         super(0, 0);
 
@@ -25,7 +23,7 @@ class GuiNote extends GuiElement{
         this.susLength = susLength;
 
         this.relatedAction = relatedAction;
-        if (relatedAction != null) relatedAction._note = this;
+        if (relatedAction != null) (cast (relatedAction, NoteAddAction))._note = this;
 
         loadGraphic(Paths.image("NOTE_assets"));
         frames = Paths.getSparrowAtlas("NOTE_assets");

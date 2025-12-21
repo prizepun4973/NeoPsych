@@ -352,11 +352,6 @@ class ChartEditorState extends BuiltinJITState {
         wip.setFormat(Paths.font("vcr.ttf"), 16, FlxColor.WHITE, FlxTextAlign.LEFT);
         add(wip);
 
-        conductorLine = new FlxSprite(0, Y_OFFSET).makeGraphic(GRID_SIZE * 13, 4, 0xffBD99FF);
-        conductorLine.screenCenter(X);
-        conductorLine.x -= GRID_SIZE / 2;
-        add(conductorLine);
-
         sectionStartLine = new FlxSprite(0, Y_OFFSET).makeGraphic(GRID_SIZE * 13, 4, FlxColor.WHITE);
         sectionStartLine.screenCenter(X);
         sectionStartLine.x -= GRID_SIZE / 2;
@@ -366,6 +361,11 @@ class ChartEditorState extends BuiltinJITState {
         sectionStopLine.screenCenter(X);
         sectionStopLine.x -= GRID_SIZE / 2;
         add(sectionStopLine);
+
+        conductorLine = new FlxSprite(0, Y_OFFSET).makeGraphic(GRID_SIZE * 13, 4, 0xffBD99FF);
+        conductorLine.screenCenter(X);
+        conductorLine.x -= GRID_SIZE / 2;
+        add(conductorLine);
 
         crosshair = new Crosshair();
         add(crosshair);
@@ -439,13 +439,13 @@ class ChartEditorState extends BuiltinJITState {
         }
 
         if (FlxG.keys.pressed.DELETE) {
-            var deleteNotes:Array<GuiNote> = new Array();
+            var toDelete:Array<GuiElement> = new Array();
 
             selectIndicator.forEachAlive(function (indicator:SelectIndicator) {
-                if (Std.isOfType(indicator.target, GuiNote)) deleteNotes.push(cast (indicator.target, GuiNote)); 
+                toDelete.push(indicator.target); 
             });
 
-            if (deleteNotes.length > 0) addAction(new NoteRemoveAction(deleteNotes));
+            if (toDelete.length > 0) addAction(new ElementRemoveAction(toDelete));
         }
 
         // undo / redo
@@ -453,15 +453,15 @@ class ChartEditorState extends BuiltinJITState {
             undos[undos.length - 1].undo();
             redos.push(undos[undos.length - 1]);
             undos.pop();
-            // trace(undos);
-            // trace(redos);
+            trace(undos);
+            trace(redos);
         }
         if (FlxG.keys.pressed.CONTROL && FlxG.keys.justPressed.Y && redos.length > 0) {
             redos[redos.length - 1].redo();
             undos.push(redos[redos.length - 1]);
             redos.remove(redos[redos.length - 1]);
-            // trace(undos);
-            // trace(redos);
+            trace(undos);
+            trace(redos);
         }
 
         // wip
@@ -486,7 +486,13 @@ class ChartEditorState extends BuiltinJITState {
                 }
 
                 if (FlxG.mouse.pressedRight && !FlxG.keys.pressed.CONTROL && !FlxG.keys.pressed.SHIFT && Std.isOfType(crosshair.target, GuiNote) && paused) {
-                    addAction(new NoteRemoveAction([cast (crosshair.target, GuiNote)]));
+                    addAction(new ElementRemoveAction([cast (crosshair.target, GuiNote)]));
+                }
+            }
+            else {
+                if (FlxG.mouse.pressed && !FlxG.keys.pressed.CONTROL && !FlxG.keys.pressed.SHIFT && crosshair.target == null && paused) {
+                    addAction(new EventAddAction(crosshair.chained? crosshair.chainedMousePos : getMousePos())
+                    );
                 }
             }
         }
@@ -565,6 +571,7 @@ class Crosshair extends FlxSprite {
 
 class GuiElement extends FlxSprite {
     public var strumTime:Float = 0;
+    public var relatedAction:EditorAction;
 
     public function new(X:Float = 0, Y:Float = 0) {
         super(X, Y);
