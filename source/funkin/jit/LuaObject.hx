@@ -39,7 +39,6 @@ class LuaObject
 	public static var Function_StopLua:Dynamic = "##PSYCHLUA_FUNCTIONSTOPLUA";
     public var lua:State = LuaL.newstate();
     public var scriptName:String = '';
-    public var accessedProps:Map<String, Dynamic> = null;
 
 	// ur stuff
 
@@ -66,8 +65,6 @@ class LuaObject
 
         scriptName = script;
         trace('Loaded lua: ' + script);
-
-        accessedProps = new Map();
 
 		luaInit();
     }
@@ -237,7 +234,6 @@ class LuaObject
 	public function stop() {
 		if (lua == null) return;
 
-		if (accessedProps != null) accessedProps.clear();
 		Lua.close(lua);
 		lua = null;
 	}

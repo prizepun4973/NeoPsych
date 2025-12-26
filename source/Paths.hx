@@ -185,7 +185,14 @@ class Paths
 	}
 	inline static public function lua(key:String, ?library:String)
 	{
-		return getPath('$key.lua', TEXT, library);
+		if (FileSystem.exists(mods(currentModDirectory + '/' + key + '.lua')) && currentModDirectory != "") {
+			return mods(currentModDirectory + '/' + key + '.lua');
+		}
+		else if (FileSystem.exists(getPreloadPath(key + '.lua'))) {
+			return getPreloadPath(key + '.lua');
+		}
+			
+		return 'mods/' + key + '.lua';
 	}
 
 	static public function video(key:String)
