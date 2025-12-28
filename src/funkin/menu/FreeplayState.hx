@@ -61,7 +61,7 @@ class FreeplayState extends BuiltinJITState
 	override function create()
 	{
 		super.create();
-		if (call("onCreate", [])) return;
+		if (call("create", [])) return;
 
 		//Paths.clearStoredMemory();
 		//Paths.clearUnusedMemory();
@@ -210,7 +210,7 @@ class FreeplayState extends BuiltinJITState
 		text.scrollFactor.set();
 		add(text);
 		
-		call("onCreatePost", []);
+		call("postCreate", []);
 	}
 
 	override function closeSubState() {
@@ -252,7 +252,7 @@ class FreeplayState extends BuiltinJITState
 	override function update(elapsed:Float)
 	{
 		super.update(elapsed);
-		if (call("onUpdate", [elapsed])) return;
+		if (call("update", [elapsed])) return;
 
 		if (FlxG.sound.music.volume < 0.7)
 		{
@@ -414,11 +414,11 @@ class FreeplayState extends BuiltinJITState
 			FlxG.sound.play(Paths.sound('scrollMenu'));
 		}
 		
-		call("onUpdatePost", [elapsed]);
+		call("postUpdate", [elapsed]);
 	}
 
 	override function destroy() {
-		call("onDestroy", []);
+		call("destroy", []);
 		super.destroy();
 	}
 

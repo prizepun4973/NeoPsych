@@ -7,7 +7,7 @@ import flixel.tweens.FlxTween;
 import flixel.util.FlxTimer;
 import flixel.sound.FlxSound;
 
-interface ILuaState {
+interface IModState {
     public var script:Script;
     public var _cancel:Bool;
 

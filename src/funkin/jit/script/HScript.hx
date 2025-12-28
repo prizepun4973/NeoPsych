@@ -86,7 +86,7 @@ class HScript extends Script {
 	}
 
     function convertedParent():Dynamic {
-        return Std.isOfType(target, ILuaState) ? (cast (target, ILuaState)) : (cast (target, PlayState));
+        return Std.isOfType(target, IModState) ? (cast (target, IModState)) : (cast (target, PlayState));
     }
 
 	// https://github.com/CodenameCrew/CodenameEngine

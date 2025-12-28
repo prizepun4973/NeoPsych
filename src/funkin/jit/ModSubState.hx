@@ -6,7 +6,7 @@ import flixel.util.FlxTimer;
 import flixel.sound.FlxSound;
 import flixel.text.FlxText;
 
-class LuaSubState extends BuiltinJITSubState implements ILuaState {
+class ModSubState extends BuiltinJITSubState implements IModState {
 
     public function new(path:String) {
         super(path);

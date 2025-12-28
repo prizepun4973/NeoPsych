@@ -175,7 +175,7 @@ class CoolUtil
 	public static function getStateByString(state:String):FlxState {
 		switch(state) {
 			default:
-				return new funkin.jit.LuaState(state);
+				return new funkin.jit.ModState(state);
 			case "CreditsState":
 				return new CreditsState();
 			case "FlashingState":
@@ -196,7 +196,7 @@ class CoolUtil
 	public static function getSubStateByString(name:String):FlxSubState {
 		switch (name) {
 			default:
-				return new LuaSubState(name);
+				return new ModSubState(name);
 			case "GameplayChangersSubState":
 				return new GameplayChangersSubstate();
 			// case "Prompt":

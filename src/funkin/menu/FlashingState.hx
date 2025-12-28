@@ -29,7 +29,7 @@ class FlashingState extends BuiltinJITState
 	override function create()
 	{
 		super.create();
-		if (call("onCreate", [])) return;
+		if (call("create", [])) return;
 
 		var bg:FlxSprite = new FlxSprite().makeGraphic(FlxG.width, FlxG.height, FlxColor.BLACK);
 		add(bg);
@@ -45,13 +45,13 @@ class FlashingState extends BuiltinJITState
 		warnText.screenCenter(Y);
 		add(warnText);
 
-		call("onCreatePost", []);
+		call("postCreate", []);
 	}
 
 	override function update(elapsed:Float)
 	{
 		super.update(elapsed);
-		if (call("onUpdate", [elapsed])) return;
+		if (call("update", [elapsed])) return;
 
 		if(!leftState) {
 			var back:Bool = controls.BACK;
@@ -79,11 +79,11 @@ class FlashingState extends BuiltinJITState
 			}
 		}
 
-		call("onUpdatePost", []);
+		call("postUpdate", []);
 	}
 
 	override function destroy() {
-		call("onDestroy", []);
+		call("destroy", []);
 		super.destroy();
 	}
 }

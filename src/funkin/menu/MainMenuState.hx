@@ -54,7 +54,7 @@ class MainMenuState extends BuiltinJITState
 	override function create()
 	{
 		super.create();
-		if (call("onCreate", [])) return;
+		if (call("create", [])) return;
 		
 		Paths.pushGlobalMods();
 		WeekData.loadTheFirstEnabledMod();
@@ -152,7 +152,7 @@ class MainMenuState extends BuiltinJITState
 
 		changeItem();
 
-		call("onCreatePost", []);
+		call("postCreate", []);
 	}
 
 	var selectedSomethin:Bool = false;
@@ -160,7 +160,7 @@ class MainMenuState extends BuiltinJITState
 	override function update(elapsed:Float)
 	{
 		super.update(elapsed);
-		if (call("onUpdate", [elapsed])) return;
+		if (call("update", [elapsed])) return;
 
 		if (FlxG.sound.music.volume < 0.8)
 		{
@@ -246,11 +246,11 @@ class MainMenuState extends BuiltinJITState
 			spr.screenCenter(X);
 		});
 
-		call("onUpdatePost", []);
+		call("postUpdate", []);
 	}
 
 	override function destroy() {
-		call("onDestroy", []);
+		call("destroy", []);
 		super.destroy();
 	}
 

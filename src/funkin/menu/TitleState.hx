@@ -87,7 +87,7 @@ class TitleState extends BuiltinJITState
 
 	override public function create():Void
 	{
-		if (call("onCreate", [])) return;
+		if (call("create", [])) return;
 
 		Paths.clearStoredMemory();
 		Paths.clearUnusedMemory();
@@ -200,7 +200,7 @@ class TitleState extends BuiltinJITState
 		#end
 		
 		super.create();
-		call("onCreatePost", []);
+		call("postCreate", []);
 	}
 
 	var logoBl:FlxSprite;
@@ -384,7 +384,7 @@ class TitleState extends BuiltinJITState
 
 	override function update(elapsed:Float)
 	{
-		if (call("onUpdate", [elapsed])) return;
+		if (call("update", [elapsed])) return;
 
 		if (FlxG.sound.music != null)
 			Conductor.songPosition = FlxG.sound.music.time;
@@ -471,11 +471,11 @@ class TitleState extends BuiltinJITState
 		}
 
 		super.update(elapsed);
-		call("onUpdatePost", []);
+		call("postUpdate", []);
 	}
 
 	override function destroy() {
-		call("onDestroy", []);
+		call("destroy", []);
 		super.destroy();
 	}
 

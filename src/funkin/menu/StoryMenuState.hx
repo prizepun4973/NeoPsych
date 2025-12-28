@@ -69,7 +69,7 @@ class StoryMenuState extends BuiltinJITState
 		persistentUpdate = persistentDraw = true;
 
 		super.create();
-		if (call("onCreate", [])) return;
+		if (call("create", [])) return;
 
 		scoreText = new FlxText(10, 10, 0, "SCORE: 49324858", 36);
 		scoreText.setFormat("VCR OSD Mono", 32);
@@ -197,7 +197,7 @@ class StoryMenuState extends BuiltinJITState
 		changeWeek();
 		changeDifficulty();
 
-		call("onCreatePost", []);
+		call("postCreate", []);
 	}
 
 	override function closeSubState() {
@@ -209,7 +209,7 @@ class StoryMenuState extends BuiltinJITState
 	override function update(elapsed:Float)
 	{
 		super.update(elapsed);
-		if (call("onUpdate", [elapsed])) return;
+		if (call("update", [elapsed])) return;
 
 		// scoreText.setFormat('VCR OSD Mono', 32);
 		lerpScore = Math.floor(FlxMath.lerp(lerpScore, intendedScore, CoolUtil.boundTo(elapsed * 30, 0, 1)));
@@ -289,11 +289,11 @@ class StoryMenuState extends BuiltinJITState
 			lock.visible = (lock.y > FlxG.height / 2);
 		});
 
-		call("onUpdatePost", []);
+		call("postUpdate", []);
 	}
 
 	override function destroy() {
-		call("onDestroy", []);
+		call("destroy", []);
 		super.destroy();
 	}
 

@@ -9,7 +9,7 @@ import funkin.jit.script.*;
 
 import funkin.component.*;
 
-class BuiltinJITSubState extends MusicBeatSubstate implements ILuaState {
+class BuiltinJITSubState extends MusicBeatSubstate implements IModState {
 
     public var script:Script;
     public var _cancel:Bool;

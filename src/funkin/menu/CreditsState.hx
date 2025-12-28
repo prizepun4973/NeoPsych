@@ -48,7 +48,7 @@ class CreditsState extends BuiltinJITState
 	override function create()
 	{
 		super.create();
-		if (call("onCreate", [])) return;
+		if (call("create", [])) return;
 
 		#if desktop
 		// Updating Discord Rich Presence
@@ -164,7 +164,7 @@ class CreditsState extends BuiltinJITState
 		intendedColor = bg.color;
 		changeSelection();
 
-		call("onCreatePost", []);
+		call("postCreate", []);
 	}
 
 	var quitting:Bool = false;
@@ -172,7 +172,7 @@ class CreditsState extends BuiltinJITState
 	override function update(elapsed:Float)
 	{
 		super.update(elapsed);
-		if (call("onUpdate", [elapsed])) return;
+		if (call("update", [elapsed])) return;
 
 		if (FlxG.sound.music.volume < 0.7)
 		{
@@ -245,11 +245,11 @@ class CreditsState extends BuiltinJITState
 			}
 		}
 		
-		call("onUpdatePost", []);
+		call("postUpdate", []);
 	}
 
 	override function destroy() {
-		call("onDestroy", []);
+		call("destroy", []);
 		super.destroy();
 	}
 

@@ -19,7 +19,7 @@ import flixel.FlxSubState;
 
 import funkin.component.*;
 
-class BuiltinJITState extends MusicBeatState implements ILuaState {
+class BuiltinJITState extends MusicBeatState implements IModState {
 
     public var script:Script;
     public var _cancel:Bool;
@@ -78,7 +78,7 @@ class BuiltinJITState extends MusicBeatState implements ILuaState {
 
     public static function registerCallback(object:LuaScript) {
         var lua:State = object.lua;
-        var target:ILuaState = cast (object.target, ILuaState);
+        var target:IModState = cast (object.target, IModState);
 
         // Reflection callbacks
         Lua_helper.add_callback(lua, "getProperty",
@@ -579,7 +579,7 @@ class BuiltinJITState extends MusicBeatState implements ILuaState {
 	/* 
 	*   flixel stuff
 	*/
-    static function resetSpriteTag(parent:ILuaState, tag:String) {
+    static function resetSpriteTag(parent:IModState, tag:String) {
 		if (!parent.sprites.exists(tag)) return;
 
 		var sprite:FlxSprite = parent.sprites.get(tag);
@@ -590,7 +590,7 @@ class BuiltinJITState extends MusicBeatState implements ILuaState {
 		parent.sprites.remove(tag);
 	}
 
-	static function addAnimByIndices(parent:ILuaState, obj:String, name:String, prefix:String, indices:String, framerate:Int = 24, loop:Bool = false) {
+	static function addAnimByIndices(parent:IModState, obj:String, name:String, prefix:String, indices:String, framerate:Int = 24, loop:Bool = false) {
 		var strIndices:Array<String> = StringTools.trim(indices).split(',');
 		var indices:Array<Int> = [];
 		for (i in 0...strIndices.length) {
@@ -607,7 +607,7 @@ class BuiltinJITState extends MusicBeatState implements ILuaState {
 		return false;
 	}
 
-	static function cancelTimer(parent:ILuaState, tag:String) {
+	static function cancelTimer(parent:IModState, tag:String) {
 		if (parent.timers.exists(tag)) {
 			var timer:FlxTimer = parent.timers.get(tag);
 			timer.cancel();
@@ -616,7 +616,7 @@ class BuiltinJITState extends MusicBeatState implements ILuaState {
 		}
 	}
 
-	static function cancelTween(parent:ILuaState, tag:String) {
+	static function cancelTween(parent:IModState, tag:String) {
 		if (parent.tweens.exists(tag)) {
 			parent.tweens.get(tag).cancel();
 			parent.tweens.get(tag).destroy();
@@ -625,7 +625,7 @@ class BuiltinJITState extends MusicBeatState implements ILuaState {
 	}
 
 	static function doTween(lua:LuaScript, tag:String, vars:String, values:Dynamic, duration:Float, ease:String) {
-		var parent:ILuaState = cast (lua.target, ILuaState);
+		var parent:IModState = cast (lua.target, IModState);
         cancelTween(parent, tag);
 		var variables:Array<String> = vars.split('.');
 		var tweenTarget:Dynamic = getObjectDirectly(parent, variables[0]);
@@ -644,14 +644,14 @@ class BuiltinJITState extends MusicBeatState implements ILuaState {
 		} else lua.error('doTween: Couldnt find object: ' + vars);
 	}
 
-	static function convertedParent(parent:ILuaState):FlxState {
+	static function convertedParent(parent:IModState):FlxState {
 		return Std.isOfType(parent, BuiltinJITState) ? (cast (parent, BuiltinJITState)) : (cast (parent, FlxState));
 	}
 
     /*
      *  Reflection
     */
-    static function getPropertyLoop(parent:ILuaState, array:Array<String>, ?checkForTextsToo:Bool = true, ?getProperty:Bool = true):Dynamic {
+    static function getPropertyLoop(parent:IModState, array:Array<String>, ?checkForTextsToo:Bool = true, ?getProperty:Bool = true):Dynamic {
 		var result:Dynamic = getObjectDirectly(parent, array[0], checkForTextsToo);
 		var end = array.length;
 		if (getProperty) end = array.length - 1;
@@ -662,13 +662,13 @@ class BuiltinJITState extends MusicBeatState implements ILuaState {
 		return result;
 	}
 
-	static function getObjectDirectly(parent:ILuaState, objectName:String, ?checkForTextsToo:Bool = true):Dynamic {
+	static function getObjectDirectly(parent:IModState, objectName:String, ?checkForTextsToo:Bool = true):Dynamic {
 		var result:Dynamic = parent.getLuaObject(objectName, checkForTextsToo);
 		if (result == null) return getVarInArray(parent, parent, objectName);
 		return result;
 	}
 
-	static function setVarInArray(parent:ILuaState, instance:Dynamic, variable:String, value:Dynamic):Any {
+	static function setVarInArray(parent:IModState, instance:Dynamic, variable:String, value:Dynamic):Any {
 		var array:Array<String> = variable.split('[');
 		if (array.length > 1) {
 			var result:Dynamic = null;
@@ -732,7 +732,7 @@ class BuiltinJITState extends MusicBeatState implements ILuaState {
 		Reflect.setProperty(group, variable, value);
 	}
 
-	static function getVarInArray(parent:ILuaState, instance:Dynamic, variable:String):Any {
+	static function getVarInArray(parent:IModState, instance:Dynamic, variable:String):Any {
 		var array:Array<String> = variable.split('[');
 		if (array.length > 1) {
 			var result:Dynamic = null;
