@@ -200,8 +200,8 @@ class PauseSubState extends InjectedSubState
 			{
 				if(menuItems.length - 1 != curSelected && difficultyChoices.contains(daSelected)) {
 					var name:String = PlayState.SONG.song;
-					var poop = Highscore.formatSong(name, curSelected);
-					PlayState.SONG = Song.loadFromJson(poop, name);
+					var poop = funkin.game.data.Highscore.formatSong(name, curSelected);
+					PlayState.SONG = funkin.game.data.Song.loadFromJson(poop, name);
 					PlayState.storyDifficulty = curSelected;
 					MusicBeatState.resetState();
 					FlxG.sound.music.volume = 0;
@@ -258,7 +258,7 @@ class PauseSubState extends InjectedSubState
 					PlayState.deathCounter = 0;
 					PlayState.seenCutscene = false;
 
-					WeekData.loadTheFirstEnabledMod();
+					funkin.game.data.WeekData.loadTheFirstEnabledMod();
 					if(PlayState.isStoryMode) {
 						MusicBeatState.switchState(new StoryMenuState());
 					} else {

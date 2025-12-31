@@ -1,1 +1,70 @@
-{}
+[
+    {
+        "className": "StringTools",
+        "classPackage": ""
+    },
+    {
+        "className": "FlxG",
+        "classPackage": "flixel"
+    }, 
+    {
+        "className": "FlxSprite",
+        "classPackage": "flixel"
+    }, 
+    {
+        "className": "FlxCamera",
+        "classPackage": "flixel"
+    }, 
+    {
+        "className": "FlxTimer",
+        "classPackage": "flixel.util"
+    }, 
+    {
+        "className": "FlxTween",
+        "classPackage": "flixel.tweens"
+    }, 
+    {
+        "className": "FlxEase",
+        "classPackage": "flixel"
+    },
+    {
+        "className": "FlxRuntimeShader",
+        "classPackage": "flixel.addons.display"
+    },
+    {
+        "className": "ShaderFliter",
+        "classPackage": "openfl.fliters"
+    },
+    {
+        "className": "PlayState",
+        "classPackage": ""
+    },
+    {
+        "className": "Paths",
+        "classPackage": ""
+    },
+    {
+        "className": "Conductor",
+        "classPackage": ""
+    },
+    {
+        "className": "ClientPrefs",
+        "classPackage": ""
+    },
+    {
+        "className": "Character",
+        "classPackage": "funkin.game.component"
+    },
+    {
+        "className": "Alphabet",
+        "classPackage": "funkin.component"
+    },
+    {
+        "className": "ModState",
+        "classPackage": "funkin.jit"
+    },
+    {
+        "className": "ModSubState",
+        "classPackage": "funkin.jit"
+    }
+]

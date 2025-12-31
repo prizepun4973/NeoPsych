@@ -1,4 +1,4 @@
-package ;
+package funkin.game.data;
 
 import funkin.game.data.Section.SwagSection;
 import haxe.Json;

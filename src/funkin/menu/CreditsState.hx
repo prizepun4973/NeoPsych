@@ -1,7 +1,7 @@
 package funkin.menu;
 
 #if desktop
-import Discord.DiscordClient;
+import funkin.Discord.DiscordClient;
 #end
 import flash.text.TextField;
 import flixel.FlxG;

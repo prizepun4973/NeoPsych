@@ -1,7 +1,7 @@
 package funkin.editors;
 
 #if desktop
-import Discord.DiscordClient;
+import funkin.Discord.DiscordClient;
 #end
 import flash.geom.Rectangle;
 import haxe.Json;
@@ -56,7 +56,7 @@ import sys.io.File;
 import funkin.menu.*;
 import funkin.component.*;
 import funkin.game.component.*;
-import Song.SwagSong;
+import funkin.game.data.Song.SwagSong;
 import funkin.game.data.Section.SwagSection;
 
 import funkin.editors.widget.*;

@@ -8,6 +8,9 @@ import flixel.util.FlxColor;
 import funkin.component.*;
 import funkin.game.component.HealthIcon;
 
+import funkin.game.data.Highscore;
+import funkin.game.data.WeekData;
+
 using StringTools;
 
 class ResetScoreSubState extends MusicBeatSubstate

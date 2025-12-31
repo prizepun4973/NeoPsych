@@ -1,4 +1,4 @@
-package ;
+package funkin;
 
 import flixel.util.FlxSave;
 import flixel.util.FlxColor;

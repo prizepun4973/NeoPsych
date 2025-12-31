@@ -1,7 +1,7 @@
 package funkin.menu;
 
 #if desktop
-import Discord.DiscordClient;
+import funkin.Discord.DiscordClient;
 #end
 import flixel.FlxG;
 import flixel.FlxObject;
@@ -57,7 +57,7 @@ class MainMenuState extends InjectedState
 		if (call("create", [])) return;
 		
 		Paths.pushGlobalMods();
-		WeekData.loadTheFirstEnabledMod();
+		funkin.game.data.WeekData.loadTheFirstEnabledMod();
 
 		#if desktop
 		// Updating Discord Rich Presence

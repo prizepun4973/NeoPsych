@@ -6,7 +6,7 @@ import sys.FileSystem;
 import haxe.Json;
 import haxe.format.JsonParser;
 
-import Song.SwagSong;
+import funkin.game.data.Song.SwagSong;
 
 
 using StringTools;

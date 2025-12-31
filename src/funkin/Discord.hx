@@ -1,4 +1,4 @@
-package;
+package funkin;
 
 import Sys.sleep;
 import lime.app.Application;

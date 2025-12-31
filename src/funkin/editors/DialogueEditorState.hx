@@ -1,7 +1,7 @@
 package funkin.editors;
 
 #if desktop
-import Discord.DiscordClient;
+import funkin.Discord.DiscordClient;
 #end
 import flixel.FlxG;
 import flixel.FlxSprite;

@@ -44,7 +44,7 @@ import funkin.options.Controls;
 import funkin.game.component.cutscene.DialogueBoxPsych;
 
 #if desktop
-import Discord;
+import funkin.Discord;
 #end
 
 import funkin.menu.*;
@@ -56,6 +56,8 @@ import funkin.jit.script.HScript;
 import PlayState.ModchartSprite;
 import PlayState.ModchartText;
 import PlayState.DebugLuaText;
+
+import funkin.game.data.WeekData;
 
 using StringTools;
 

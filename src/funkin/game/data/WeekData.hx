@@ -1,4 +1,4 @@
-package ;
+package funkin.game.data;
 
 import sys.io.File;
 import sys.FileSystem;
@@ -7,6 +7,8 @@ import lime.utils.Assets;
 import openfl.utils.Assets as OpenFlAssets;
 import haxe.Json;
 import haxe.format.JsonParser;
+
+import funkin.CoolUtil;
 
 using StringTools;
 

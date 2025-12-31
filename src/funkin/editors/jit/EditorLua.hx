@@ -26,7 +26,7 @@ import funkin.options.Controls;
 import funkin.game.component.cutscene.DialogueBoxPsych;
 
 #if desktop
-import Discord;
+import funkin.Discord;
 #end
 
 using StringTools;

@@ -1,7 +1,7 @@
 package funkin.menu;
 
 #if desktop
-import Discord.DiscordClient;
+import funkin.Discord.DiscordClient;
 #end
 import flixel.FlxG;
 import flixel.FlxSprite;
@@ -21,8 +21,8 @@ import flixel.graphics.FlxGraphic;
 import funkin.jit.InjectedState;
 
 import funkin.component.*;
-
-
+import funkin.game.data.Highscore;
+import funkin.game.data.WeekData;
 
 using StringTools;
 
@@ -341,7 +341,7 @@ class StoryMenuState extends InjectedState
 
 			PlayState.storyDifficulty = curDifficulty;
 
-			PlayState.SONG = Song.loadFromJson(PlayState.storyPlaylist[0].toLowerCase() + diffic, PlayState.storyPlaylist[0].toLowerCase());
+			PlayState.SONG = funkin.game.data.Song.loadFromJson(PlayState.storyPlaylist[0].toLowerCase() + diffic, PlayState.storyPlaylist[0].toLowerCase());
 			PlayState.campaignScore = 0;
 			PlayState.campaignMisses = 0;
 			new FlxTimer().start(1, function(tmr:FlxTimer)

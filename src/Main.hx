@@ -16,7 +16,7 @@ import lime.app.Application;
 import openfl.events.UncaughtErrorEvent;
 import haxe.CallStack;
 import haxe.io.Path;
-import Discord.DiscordClient;
+import funkin.Discord.DiscordClient;
 import sys.FileSystem;
 import sys.io.File;
 import sys.io.Process;
@@ -57,6 +57,8 @@ class Main extends Sprite {
 		var stageHeight:Int = Lib.current.stage.stageHeight;
 
 		#if hxdiscord_rpc DiscordClient.prepare(); #end
+
+		funkin.jit.script.HScript.loadMappings();
 
 		ClientPrefs.loadDefaultKeys();
 		addChild(new FlxGame(gameWidth, gameHeight, initialState, framerate, framerate, skipSplash, startFullscreen));

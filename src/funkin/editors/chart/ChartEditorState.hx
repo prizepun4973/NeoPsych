@@ -13,7 +13,7 @@ import flixel.math.FlxMath;
 import flixel.sound.FlxSound;
 import flixel.FlxG;
 import flixel.group.FlxGroup.FlxTypedGroup;
-import Song.SwagSong;
+import funkin.game.data.Song.SwagSong;
 import funkin.component.MusicBeatState;
 import funkin.game.component.Note.EventNote;
 import funkin.game.data.StageData;

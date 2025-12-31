@@ -2,7 +2,7 @@ package funkin.options.menu;
 
 import funkin.jit.InjectedSubState;
 #if desktop
-import Discord.DiscordClient;
+import funkin.Discord.DiscordClient;
 #end
 import flash.text.TextField;
 import flixel.FlxG;

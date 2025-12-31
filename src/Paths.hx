@@ -466,7 +466,7 @@ class Paths
 		var path:String = 'modsList.txt';
 		if(FileSystem.exists(path))
 		{
-			var list:Array<String> = CoolUtil.coolTextFile(path);
+			var list:Array<String> = funkin.CoolUtil.coolTextFile(path);
 			for (i in list)
 			{
 				var dat = i.split("|");

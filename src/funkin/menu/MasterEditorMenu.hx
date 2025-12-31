@@ -1,7 +1,7 @@
 package funkin.menu;
 
 #if desktop
-import Discord.DiscordClient;
+import funkin.Discord.DiscordClient;
 #end
 import flixel.FlxG;
 import flixel.FlxSprite;
@@ -176,7 +176,7 @@ class MasterEditorMenu extends MusicBeatState
 		if(curDirectory >= directories.length)
 			curDirectory = 0;
 	
-		WeekData.setDirectoryFromWeek();
+		funkin.game.data.WeekData.setDirectoryFromWeek();
 		if(directories[curDirectory] == null || directories[curDirectory].length < 1)
 			directoryTxt.text = '< No Mod Directory Loaded >';
 		else

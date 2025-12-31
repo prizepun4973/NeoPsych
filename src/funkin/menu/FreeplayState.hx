@@ -1,7 +1,7 @@
 package funkin.menu;
 
 #if desktop
-import Discord.DiscordClient;
+import funkin.Discord.DiscordClient;
 #end
 import flash.text.TextField;
 import flixel.FlxG;
@@ -24,7 +24,9 @@ import funkin.jit.InjectedState;
 import funkin.component.*;
 import funkin.game.component.HealthIcon;
 
-
+import funkin.game.data.Highscore;
+import funkin.game.data.Song;
+import funkin.game.data.WeekData;
 
 using StringTools;
 

@@ -1,6 +1,6 @@
 import funkin.game.data.*;
 import funkin.game.component.*;
-import Song.SwagSong;
+import funkin.game.data.Song.SwagSong;
 
 /**
  * ...

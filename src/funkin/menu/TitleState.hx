@@ -94,7 +94,7 @@ class TitleState extends InjectedState
 
 		Paths.pushGlobalMods();
 		// Just to load a mod on start up if ya got one. For mods that change the menu music and bg
-		WeekData.loadTheFirstEnabledMod();
+		funkin.game.data.WeekData.loadTheFirstEnabledMod();
 
 		//trace(path, FileSystem.exists(path));
 
@@ -155,7 +155,7 @@ class TitleState extends InjectedState
 		}
 		#end
 
-		Highscore.load();
+		funkin.game.data.Highscore.load();
 
 		// IGNORE THIS!!!
 		titleJSON = Json.parse(Paths.getTextFromFile('images/gfDanceTitle.json'));

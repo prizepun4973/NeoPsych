@@ -1,7 +1,7 @@
 package funkin.editors;
 
 #if desktop
-import Discord.DiscordClient;
+import funkin.Discord.DiscordClient;
 #end
 import flixel.FlxG;
 import flixel.FlxSprite;
@@ -31,7 +31,8 @@ import haxe.Json;
 import sys.io.File;
 import sys.FileSystem;
 #end
-import WeekData.WeekFile;
+import funkin.game.data.WeekData;
+import funkin.game.data.WeekData.WeekFile;
 
 import funkin.menu.TitleState;
 import funkin.component.*;

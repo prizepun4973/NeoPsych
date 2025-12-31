@@ -1,7 +1,7 @@
 package funkin.editors;
 
 import funkin.game.data.Section.SwagSection;
-import Song.SwagSong;
+import funkin.game.data.Song.SwagSong;
 import flixel.group.FlxGroup.FlxTypedGroup;
 import flixel.addons.transition.FlxTransitionableState;
 import flixel.util.FlxColor;

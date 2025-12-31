@@ -1,7 +1,9 @@
 package funkin.jit.script;
 
+#if sys
 import sys.FileSystem;
 import sys.io.File;
+#end
 import funkin.jit.InjectedState;
 import hscript.Parser;
 import hscript.Interp;
@@ -11,33 +13,25 @@ import flixel.FlxState;
 import funkin.game.component.Character;
 import funkin.jit.script.Script;
 
+typedef ClassRegistry = {
+	var className:String;
+	var classPackage:String;
+}
+
 class HScript extends Script {
 
-    function setup() {
-		// flixel
-        addClass('FlxG', 'flixel');
-		addClass('FlxSprite', 'flixel');
-		addClass('FlxCamera', 'flixel');
-		addClass('FlxTimer', 'flixel.util');
-		addClass('FlxTween', 'flixel.tweens');
-		addClass('FlxEase', 'flixel.tweens');
-		#if (!flash && sys) addClass('FlxRuntimeShader', 'flixel.addons.display'); #end
-		addClass('ShaderFilter', 'openfl.filters');
-		
-		// haxe
-		addClass('StringTools', '');
+	static var registeredClass:Array<ClassRegistry>;
 
-		// funkin
+    function setup() {
+
+		if (registeredClass.length > 0) {
+			for (i in registeredClass) {
+				var libName = i.className;
+				var libPackage = i.classPackage;
+				interp.variables.set(libName, Type.resolveClass(libPackage != "" ? libPackage + "." + libName : libName));
+			}
+		}
 		
-		addClass('PlayState', '');
-		addClass('Paths', '');
-		addClass('Conductor', '');
-		addClass('ClientPrefs', '');
-		addClass('Character', 'funkin.game.component');
-		addClass('Alphabet', 'funkin.component');
-		
-		addClass('ModState', 'funkin.jit');
-		addClass('ModSubState', 'funkin.jit');
 
 		interp.variables.set('Function_Stop', Script.Function_Stop);
 		interp.variables.set('Function_Continue', Script.Function_Continue);
@@ -61,9 +55,34 @@ class HScript extends Script {
 			}
 			return false;
 		});
+
+		// // flixel
+        // addClass('FlxG', 'flixel');
+		// addClass('FlxSprite', 'flixel');
+		// addClass('FlxCamera', 'flixel');
+		// addClass('FlxTimer', 'flixel.util');
+		// addClass('FlxTween', 'flixel.tweens');
+		// addClass('FlxEase', 'flixel.tweens');
+		// #if (!flash && sys) addClass('FlxRuntimeShader', 'flixel.addons.display'); #end
+		// addClass('ShaderFilter', 'openfl.filters');
+		
+		// // haxe
+		// addClass('StringTools', '');
+
+		// // funkin
+		
+		// addClass('PlayState', '');
+		// addClass('Paths', '');
+		// addClass('Conductor', '');
+		// addClass('ClientPrefs', '');
+		// addClass('Character', 'funkin.game.component');
+		// addClass('Alphabet', 'funkin.component');
+		
+		// addClass('ModState', 'funkin.jit');
+		// addClass('ModSubState', 'funkin.jit');
     }
 
-	public static var parser:Parser = new Parser();
+	public var parser:Parser = new Parser();
 	public var interp:Interp;
     public var code:String = "";
 
@@ -88,19 +107,15 @@ class HScript extends Script {
         if (FileSystem.exists(Paths.hscript(path))) execute(File.getContent(Paths.hscript(path)));
 	}
 
-    function addClass(libName:String, libPackage:String) {
-        interp.variables.set(libName, Type.resolveClass(libPackage != "" ? libPackage + "." + libName : libName));
-    }
-
 	public function execute(codeToRun:String):Dynamic {
 		@:privateAccess
-		HScript.parser.line = 1;
-		HScript.parser.allowTypes = true;
+		parser.line = 1;
+		parser.allowTypes = true;
 
         code = codeToRun;
 
 		try {
-			return interp.execute(HScript.parser.parseString(codeToRun));
+			return interp.execute(parser.parseString(codeToRun));
 		}
 		catch (e:Dynamic) {
 			Sys.println(e);
@@ -136,9 +151,13 @@ class HScript extends Script {
 		else Sys.println(path + '.hx: ' + Std.string(v));
 	}
 
-	static function loadMappings() {
+	public static function loadMappings() {
 		if (!FileSystem.exists("mappings.json")) return;
-
-		var result:Map<String, String> = cast haxe.Json.parse(File.getContent("mappings"));
+		try {
+			registeredClass = cast haxe.Json.parse(File.getContent("mappings.json"));
+		}
+		catch (e:Dynamic) {
+			trace("Invalid mappings file");
+		}
 	}
 }
