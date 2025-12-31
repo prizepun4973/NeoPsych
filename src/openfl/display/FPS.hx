@@ -81,8 +81,6 @@ class FPS extends TextField
 		if (currentFPS > ClientPrefs.framerate) currentFPS = ClientPrefs.framerate;
 
 		if (currentCount != cacheCount /*&& visible*/) {
-			background = true;
-			backgroundColor = 0x000000;
 
 			text = "FPS: " + currentFPS;
 			var memoryMegas:Float = 0;
