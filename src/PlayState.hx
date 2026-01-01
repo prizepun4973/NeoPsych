@@ -3002,8 +3002,7 @@ class PlayState extends MusicBeatState {
 				numScore.visible = !ClientPrefs.hideHud;
 
 				//if (combo >= 10 || combo == 0)
-				if(showComboNum)
-					insert(members.indexOf(strumLineNotes), numScore);
+				if(showComboNum) insert(members.indexOf(strumLineNotes), numScore);
 
 				FlxTween.tween(numScore, {alpha: 0}, 0.2 / playbackRate, {
 					onComplete: function(tween:FlxTween) { numScore.destroy(); },
