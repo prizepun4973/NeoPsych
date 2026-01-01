@@ -59,6 +59,7 @@ class Main extends Sprite {
 		#if hxdiscord_rpc DiscordClient.prepare(); #end
 
 		funkin.jit.script.HScript.loadMappings();
+		funkin.NdllUtil.noop();
 
 		ClientPrefs.loadDefaultKeys();
 		addChild(new FlxGame(gameWidth, gameHeight, initialState, framerate, framerate, skipSplash, startFullscreen));

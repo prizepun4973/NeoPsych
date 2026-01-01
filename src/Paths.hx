@@ -59,6 +59,7 @@ class Paths {
 		'assets/shared/music/breakfast.$SOUND_EXT',
 		'assets/shared/music/tea-time.$SOUND_EXT',
 	];
+	
 	/// haya I love you for the base cache dump I took to the max
 	public static function clearUnusedMemory() {
 		// clear non local assets in the tracked assets list
@@ -117,13 +118,10 @@ class Paths {
 		currentLevel = name.toLowerCase();
 	}
 
-	public static function getPath(file:String, type:AssetType, ?library:Null<String> = null)
-	{
-		if (library != null)
-			return getLibraryPath(file, library);
+	public static function getPath(file:String, ?type:AssetType = AssetType.BINARY, ?library:Null<String> = null) {
+		if (library != null) return getLibraryPath(file, library);
 
-		if (currentLevel != null)
-		{
+		if (currentLevel != null) {
 			var levelPath:String = '';
 			if(currentLevel != 'shared') {
 				levelPath = getLibraryPathForce(file, currentLevel);
@@ -182,6 +180,17 @@ class Paths {
 	inline static public function shaderVertex(key:String, ?library:String)
 	{
 		return getPath('shaders/$key.vert', TEXT, library);
+	}
+	static public function ndll(key:String, ?library:String)
+	{
+		if (FileSystem.exists(mods(currentModDirectory + '/ndlls/' + key + '.ndll')) && currentModDirectory != "") {
+			return mods(currentModDirectory + '/ndlls/' + key + '.ndll');
+		}
+		else if (FileSystem.exists(getPreloadPath('/ndlls/' + key + '.ndll'))) {
+			return getPreloadPath('/ndlls/' + key + '.ndll');
+		}
+			
+		return 'mods/ndlls' + key + '.lua';
 	}
 	static public function lua(key:String, ?library:String)
 	{

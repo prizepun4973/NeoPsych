@@ -66,5 +66,9 @@
     {
         "className": "ModSubState",
         "classPackage": "funkin.jit"
+    },
+    {
+        "className": "NdllUtil",
+        "classPackage": "funkin"
     }
 ]

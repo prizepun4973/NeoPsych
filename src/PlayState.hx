@@ -4548,9 +4548,7 @@ class PlayState extends MusicBeatState {
 	public function spawnNoteSplashOnNote(note:Note) {
 		if(ClientPrefs.noteSplashes && note != null) {
 			var strum:StrumNote = playerStrums.members[note.noteData];
-			if(strum != null) {
-				spawnNoteSplash(strum.x, strum.y, note.noteData, note);
-			}
+			if(strum != null) spawnNoteSplash(strum.x, strum.y, note.noteData, note);
 		}
 	}
 
@@ -4561,8 +4559,7 @@ class PlayState extends MusicBeatState {
 		var hue:Float = 0;
 		var sat:Float = 0;
 		var brt:Float = 0;
-		if (data > -1 && data < ClientPrefs.arrowHSV.length)
-		{
+		if (data > -1 && data < ClientPrefs.arrowHSV.length) {
 			hue = ClientPrefs.arrowHSV[data][0] / 360;
 			sat = ClientPrefs.arrowHSV[data][1] / 100;
 			brt = ClientPrefs.arrowHSV[data][2] / 100;
@@ -5045,8 +5042,7 @@ class PlayState extends MusicBeatState {
 					callHScript('beatHit', [Math.floor(i / 4)]);
 				}
 			}
-		}
-		else {
+		} else {
 			// trace(songTime);
 			var elapsed:Float = 1 / FlxG.updateFramerate;
 			if (songTime > 0) {
@@ -5095,26 +5091,22 @@ class PlayState extends MusicBeatState {
 	var curLightEvent:Int = -1;
 }
 
-class ModchartSprite extends FlxSprite
-{
+class ModchartSprite extends FlxSprite {
 	public var wasAdded:Bool = false;
 	public var animOffsets:Map<String, Array<Float>> = new Map<String, Array<Float>>();
 
 	// public var isInFront:Bool = false;
 
-	public function new(?x:Float = 0, ?y:Float = 0)
-	{
+	public function new(?x:Float = 0, ?y:Float = 0) {
 		super(x, y);
 		antialiasing = ClientPrefs.globalAntialiasing;
 	}
 }
 
-class ModchartText extends FlxText
-{
+class ModchartText extends FlxText {
 	public var wasAdded:Bool = false;
 
-	public function new(x:Float, y:Float, text:String, width:Float)
-	{
+	public function new(x:Float, y:Float, text:String, width:Float) {
 		super(x, y, width, text, 16);
 		setFormat(Paths.font("vcr.ttf"), 16, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		cameras = [PlayState.instance.camHUD];
@@ -5123,14 +5115,12 @@ class ModchartText extends FlxText
 	}
 }
 
-class DebugLuaText extends FlxText
-{
+class DebugLuaText extends FlxText {
 	private var disableTime:Float = 6;
 
 	public var parentGroup:FlxTypedGroup<DebugLuaText>;
 
-	public function new(text:String, parentGroup:FlxTypedGroup<DebugLuaText>, color:FlxColor)
-	{
+	public function new(text:String, parentGroup:FlxTypedGroup<DebugLuaText>, color:FlxColor) {
 		this.parentGroup = parentGroup;
 		super(10, 10, 0, text, 16);
 		setFormat(Paths.font("vcr.ttf"), 16, color, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
@@ -5138,13 +5128,10 @@ class DebugLuaText extends FlxText
 		borderSize = 1;
 	}
 
-	override function update(elapsed:Float)
-	{
+	override function update(elapsed:Float) {
 		super.update(elapsed);
 		disableTime -= elapsed;
-		if (disableTime < 0)
-			disableTime = 0;
-		if (disableTime < 1)
-			alpha = disableTime;
+		if (disableTime < 0) disableTime = 0;
+		if (disableTime < 1) alpha = disableTime;
 	}
 }

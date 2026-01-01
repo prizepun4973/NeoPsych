@@ -121,6 +121,13 @@
 	<define name="hscriptPos" />
 	<define name="CUSTOM_CLASSES" />
 
+	<!-- Comment this out to prevent unused classes from being compiled.
+		 Reduces compilation time at the cost of limited HScript flexibility. !-->
+	<define name="COMPILE_ALL_CLASSES" unless="STRIPPED_COMPILE" />
+
+	<!-- Comment this out to disable support for custom ndlls. !-->
+	<haxedef name="NDLLS_SUPPORTED" unless="web || iphonesim || hl" />
+
 	<!--In case you want to use the ui package-->
 	<haxelib name="flixel-ui" />
 	<haxelib name="linc_luajit"/>
