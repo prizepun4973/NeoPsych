@@ -41,10 +41,6 @@ class NoteHitEvent extends Cancellable {
 	public var player:Bool;
 
 	/**
-	 * Suffix of the animation. "-alt" for alt notes, "" for normal ones.
-	 */
-	public var animSuffix:String = "";
-	/**
 	 * Prefix of the rating sprite path. Defaults to "game/score/"
 	 */
 	public var ratingPrefix:String = "";

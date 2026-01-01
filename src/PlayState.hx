@@ -4231,52 +4231,66 @@ class PlayState extends MusicBeatState {
 	}
 
 	function opponentNoteHit(note:Note):Void {
+
+		var event:NoteHitEvent = new NoteHitEvent(
+			note,
+			note.gfNote && gf != null ? gf : dad,
+			false,
+			0,
+			0
+		);
+
+		callEvent('onNoteHit', event);
+		callEvent('onDadHit', event);
+
+		if (event.cancelled || note.ignoreNote) {
+			
+			if (!note.isSustainNote && event.deleteNote) {
+				note.kill();
+				notes.remove(note, true);
+				note.destroy();
+			}
+
+			callOnLuas('opponentNoteHit', [notes.members.indexOf(note), Math.abs(note.noteData), note.noteType, note.isSustainNote]);
+			callEvent('onPostNoteHit', event);
+
+			return;
+		}
+
 		if (Paths.formatToSongPath(SONG.song) != 'tutorial') camZooming = true;
+
+		if(!note.noAnimation) {
+			var altAnim:String = note.animSuffix;
+
+			if (SONG.notes[curSection] != null && SONG.notes[curSection].altAnim && !SONG.notes[curSection].gfSection) altAnim = '-alt';
+
+			var animToPlay:String = singAnimations[Std.int(Math.abs(note.noteData))] + altAnim;
+
+			event.character.playAnim(animToPlay, true);
+			event.character.holdTimer = 0;
+		}
+
+		if (SONG.needsVoices) vocals.volume = 1;
+
+		var time:Float = 0.15;
+		if(note.isSustainNote && !note.animation.curAnim.name.endsWith('end')) time += 0.15;
+		StrumPlayAnim(true, Std.int(Math.abs(note.noteData)), time);
+		note.hitByOpponent = true;
+
+		if (!note.isSustainNote && event.deleteNote) {
+			note.kill();
+			notes.remove(note, true);
+			note.destroy();
+		}
 
 		if(note.noteType == 'Hey!' && dad.animOffsets.exists('hey')) {
 			dad.playAnim('hey', true);
 			dad.specialAnim = true;
 			dad.heyTimer = 0.6;
-		} else if(!note.noAnimation) {
-			var altAnim:String = note.animSuffix;
-
-			if (SONG.notes[curSection] != null) {
-				if (SONG.notes[curSection].altAnim && !SONG.notes[curSection].gfSection) {
-					altAnim = '-alt';
-				}
-			}
-
-			var char:Character = dad;
-			var animToPlay:String = singAnimations[Std.int(Math.abs(note.noteData))] + altAnim;
-			if(note.gfNote) {
-				char = gf;
-			}
-
-			if(char != null)
-			{
-				char.playAnim(animToPlay, true);
-				char.holdTimer = 0;
-			}
 		}
-
-		if (SONG.needsVoices)
-			vocals.volume = 1;
-
-		var time:Float = 0.15;
-		if(note.isSustainNote && !note.animation.curAnim.name.endsWith('end')) {
-			time += 0.15;
-		}
-		StrumPlayAnim(true, Std.int(Math.abs(note.noteData)), time);
-		note.hitByOpponent = true;
 
 		callOnLuas('opponentNoteHit', [notes.members.indexOf(note), Math.abs(note.noteData), note.noteType, note.isSustainNote]);
-
-		if (!note.isSustainNote)
-		{
-			note.kill();
-			notes.remove(note, true);
-			note.destroy();
-		}
+		callEvent('onPostNoteHit', event);
 	}
 
 	function goodNoteHit(note:Note):Void {
