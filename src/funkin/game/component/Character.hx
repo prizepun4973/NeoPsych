@@ -18,9 +18,6 @@ import openfl.utils.Assets;
 import haxe.Json;
 import haxe.format.JsonParser;
 
-
-import funkin.game.component.bg.TankmenBG;
-
 using StringTools;
 
 typedef CharacterFile = {
@@ -355,20 +352,17 @@ class Character extends FlxSprite
 		}
 	}
 	
-	function loadMappedAnims():Void
-	{
+	function loadMappedAnims():Void {
 		var noteData:Array<SwagSection> = funkin.game.data.Song.loadFromJson('picospeaker', Paths.formatToSongPath(PlayState.SONG.song)).notes;
 		for (section in noteData) {
 			for (songNotes in section.sectionNotes) {
 				animationNotes.push(songNotes);
 			}
 		}
-		TankmenBG.animationNotes = animationNotes;
 		animationNotes.sort(sortAnims);
 	}
 
-	function sortAnims(Obj1:Array<Dynamic>, Obj2:Array<Dynamic>):Int
-	{
+	function sortAnims(Obj1:Array<Dynamic>, Obj2:Array<Dynamic>):Int {
 		return FlxSort.byValues(FlxSort.ASCENDING, Obj1[0], Obj2[0]);
 	}
 

@@ -43,7 +43,7 @@ import sys.FileSystem;
 
 import funkin.component.*;
 import funkin.game.component.*;
-import funkin.game.component.bg.BGSprite;
+import funkin.game.component.BGSprite;
 
 using StringTools;
 

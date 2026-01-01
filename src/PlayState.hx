@@ -143,7 +143,6 @@ class PlayState extends MusicBeatState {
 	public var dadGroup:FlxSpriteGroup;
 	public var gfGroup:FlxSpriteGroup;
 	public static var curStage:String = '';
-	public static var isPixelStage:Bool = false;
 	public static var SONG:SwagSong = null;
 	public static var isStoryMode:Bool = false;
 	public static var storyWeek:Int = 0;
@@ -409,7 +408,6 @@ class PlayState extends MusicBeatState {
 		}
 
 		defaultCamZoom = stageData.defaultZoom;
-		isPixelStage = stageData.isPixelStage;
 		BF_X = stageData.boyfriend[0];
 		BF_Y = stageData.boyfriend[1];
 		GF_X = stageData.girlfriend[0];
@@ -1056,7 +1054,6 @@ class PlayState extends MusicBeatState {
 		introAssets.set('pixel', ['pixelUI/ready-pixel', 'pixelUI/set-pixel', 'pixelUI/date-pixel']);
 
 		var introAlts:Array<String> = introAssets.get('default');
-		if (isPixelStage) introAlts = introAssets.get('pixel');
 		
 		for (asset in introAlts)
 			Paths.image(asset);
@@ -1139,10 +1136,6 @@ class PlayState extends MusicBeatState {
 
 			var introAlts:Array<String> = introAssets.get('default');
 			var antialias:Bool = ClientPrefs.globalAntialiasing;
-			if(isPixelStage) {
-				introAlts = introAssets.get('pixel');
-				antialias = false;
-			}
 
 			switch (swagCounter) {
 				case 0:
@@ -1152,9 +1145,6 @@ class PlayState extends MusicBeatState {
 					countdownReady.cameras = [camHUD];
 					countdownReady.scrollFactor.set();
 					countdownReady.updateHitbox();
-
-					if (PlayState.isPixelStage)
-						countdownReady.setGraphicSize(Std.int(countdownReady.width * daPixelZoom));
 
 					countdownReady.screenCenter();
 					countdownReady.antialiasing = antialias;
@@ -1172,9 +1162,6 @@ class PlayState extends MusicBeatState {
 					countdownSet.cameras = [camHUD];
 					countdownSet.scrollFactor.set();
 
-					if (PlayState.isPixelStage)
-						countdownSet.setGraphicSize(Std.int(countdownSet.width * daPixelZoom));
-
 					countdownSet.screenCenter();
 					countdownSet.antialiasing = antialias;
 					insert(members.indexOf(notes), countdownSet);
@@ -1190,8 +1177,6 @@ class PlayState extends MusicBeatState {
 					countdownGo = new FlxSprite().loadGraphic(Paths.image(introAlts[2]));
 					countdownGo.cameras = [camHUD];
 					countdownGo.scrollFactor.set();
-
-					if (PlayState.isPixelStage) countdownGo.setGraphicSize(Std.int(countdownGo.width * daPixelZoom));
 
 					countdownGo.updateHitbox();
 
@@ -2522,10 +2507,6 @@ class PlayState extends MusicBeatState {
 	private function cachePopUpScore() {
 		var pixelShitPart1:String = '';
 		var pixelShitPart2:String = '';
-		if (isPixelStage) {
-			pixelShitPart1 = 'pixelUI/';
-			pixelShitPart2 = '-pixel';
-		}
 
 		Paths.image(pixelShitPart1 + "sick" + pixelShitPart2);
 		Paths.image(pixelShitPart1 + "good" + pixelShitPart2);

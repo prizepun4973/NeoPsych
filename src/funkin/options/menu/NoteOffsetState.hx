@@ -18,7 +18,7 @@ import flixel.math.FlxPoint;
 
 import funkin.component.*;
 import funkin.game.component.*;
-import funkin.game.component.bg.BGSprite;
+import funkin.game.component.BGSprite;
 
 import funkin.options.OptionsState;
 
