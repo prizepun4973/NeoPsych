@@ -1,14 +1,18 @@
 package funkin.game.jit.event;
 
-class EventGameEvent extends Cancellable {
-    public var name:String;
-    public var value1:String;
-    public var value2:String;
+typedef ChartEvent = {
+    var name:String;
+    var params:Array<Dynamic>;
+}
 
-    public function new(name:String, value1:String, value2:String) {
+class EventGameEvent extends Cancellable {
+    public var event:ChartEvent;
+
+    public function new(_name:String, value1:String, value2:String) {
         super();
-        this.name = name;
-        this.value1 = value1;
-        this.value2 = value2;
+        event = {
+            name: _name,
+            params: [value1, value2]
+        }
     }
 }

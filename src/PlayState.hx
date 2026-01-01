@@ -3317,8 +3317,7 @@ class PlayState extends MusicBeatState {
 				var val:Null<Int> = Std.parseInt(value1);
 				if(val == null) val = 0;
 
-				switch(Std.parseInt(value1))
-				{
+				switch(Std.parseInt(value1)) {
 					case 1, 2, 3: //enable and target dad
 						if(val == 1) //enable
 						{
@@ -4007,9 +4006,7 @@ class PlayState extends MusicBeatState {
 				}
 				else{
 					callOnLuas('onGhostTap', [key]);
-					if (canMiss) {
-						noteMissPress(key);
-					}
+					if (canMiss) noteMissPress(key);
 				}
 
 				//more accurate hit time for the ratings? part 2 (Now that the calculations are done, go back to the time it was before for not causing a note stutter)
@@ -4017,8 +4014,7 @@ class PlayState extends MusicBeatState {
 			}
 
 			var spr:StrumNote = playerStrums.members[key];
-			if(strumsBlocked[key] != true && spr != null && spr.animation.curAnim.name != 'confirm')
-			{
+			if(strumsBlocked[key] != true && spr != null && spr.animation.curAnim.name != 'confirm') {
 				spr.playAnim('pressed');
 				spr.resetAnim = 0;
 			}
@@ -4027,8 +4023,7 @@ class PlayState extends MusicBeatState {
 		//trace('pressed: ' + controlArray);
 	}
 
-	function sortHitNotes(a:Note, b:Note):Int
-	{
+	function sortHitNotes(a:Note, b:Note):Int {
 		if (a.lowPriority && !b.lowPriority)
 			return 1;
 		else if (!a.lowPriority && b.lowPriority)
