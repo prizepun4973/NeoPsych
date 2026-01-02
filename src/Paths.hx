@@ -20,6 +20,7 @@ import sys.FileSystem;
 import flixel.graphics.FlxGraphic;
 import openfl.display.BitmapData;
 import haxe.Json;
+import openfl.display3D.textures.RectangleTexture;
 
 import flash.media.Sound;
 
@@ -65,16 +66,20 @@ class Paths {
 		// clear non local assets in the tracked assets list
 		for (key in currentTrackedAssets.keys()) {
 			// if it is not currently contained within the used local assets
-			if (!localTrackedAssets.contains(key)
-				&& !dumpExclusions.contains(key)) {
+			if (!localTrackedAssets.contains(key) && !dumpExclusions.contains(key)) {
 				// get rid of it
 				var obj = currentTrackedAssets.get(key);
 				@:privateAccess
 				if (obj != null) {
-					openfl.Assets.cache.removeBitmapData(key);
+					// remove the key from all cache maps
 					FlxG.bitmap._cache.remove(key);
-					obj.destroy();
+					openfl.Assets.cache.removeBitmapData(key);
 					currentTrackedAssets.remove(key);
+
+					// and get rid of the object
+					obj.persist = false; // make sure the garbage collector actually clears it up
+					obj.destroyOnNoUse = true;
+					obj.destroy();
 				}
 			}
 		}
@@ -99,8 +104,7 @@ class Paths {
 
 		// clear all sounds that are cached
 		for (key in currentTrackedSounds.keys()) {
-			if (!localTrackedAssets.contains(key)
-			&& !dumpExclusions.contains(key) && key != null) {
+			if (!localTrackedAssets.contains(key) && !dumpExclusions.contains(key) && key != null) {
 				//trace('test: ' + dumpExclusions, key);
 				Assets.cache.clear(key);
 				currentTrackedSounds.remove(key);
@@ -113,8 +117,7 @@ class Paths {
 
 	static public var currentModDirectory:String = '';
 	static public var currentLevel:String;
-	static public function setCurrentLevel(name:String)
-	{
+	static public function setCurrentLevel(name:String) {
 		currentLevel = name.toLowerCase();
 	}
 
@@ -244,10 +247,63 @@ class Paths {
 		#end
 	}
 
-	inline static public function image(key:String, ?library:String):FlxGraphic {
-		// streamlined the assets process more
-		var returnAsset:FlxGraphic = returnGraphic(key, library);
-		return returnAsset;
+	public static var currentTrackedAssets:Map<String, FlxGraphic> = [];
+	static public function image(key:String, ?library:String = null, ?allowGPU:Bool = true):FlxGraphic
+	{
+		var bitmap:BitmapData = null;
+		var file:String = null;
+
+		file = modsImages(key);
+		if (currentTrackedAssets.exists(file))
+		{
+			localTrackedAssets.push(file);
+			return currentTrackedAssets.get(file);
+		}
+		else if (FileSystem.exists(file)) bitmap = BitmapData.fromFile(file);
+		else {
+			file = getPath('images/$key.png', IMAGE, library);
+			if (currentTrackedAssets.exists(file)) {
+				localTrackedAssets.push(file);
+				return currentTrackedAssets.get(file);
+			}
+			else if (OpenFlAssets.exists(file, IMAGE)) bitmap = OpenFlAssets.getBitmapData(file);
+		}
+
+		if (bitmap != null) {
+			var retVal = cacheBitmap(file, bitmap, allowGPU);
+			if(retVal != null) return retVal;
+		}
+
+		trace('Failed to load image $file');
+		return null;
+	}
+
+	static public function cacheBitmap(file:String, ?bitmap:BitmapData = null, ?allowGPU:Bool = true)
+	{
+		if(bitmap == null) {
+			if (FileSystem.exists(file)) bitmap = BitmapData.fromFile(file);
+			else {
+				if (OpenFlAssets.exists(file, IMAGE)) bitmap = OpenFlAssets.getBitmapData(file);
+			}
+
+			if(bitmap == null) return null;
+		}
+
+		localTrackedAssets.push(file);
+		if (allowGPU && ClientPrefs.cacheOnGPU)
+		{
+			var texture:RectangleTexture = FlxG.stage.context3D.createRectangleTexture(bitmap.width, bitmap.height, BGRA, true);
+			texture.uploadFromBitmapData(bitmap);
+			bitmap.image.data = null;
+			bitmap.dispose();
+			bitmap.disposeImage();
+			bitmap = BitmapData.fromTexture(texture);
+		}
+		var newGraphic:FlxGraphic = FlxGraphic.fromBitmapData(bitmap, false, file);
+		newGraphic.persist = true;
+		newGraphic.destroyOnNoUse = false;
+		currentTrackedAssets.set(file, newGraphic);
+		return newGraphic;
 	}
 
 	static public function getTextFromFile(key:String, ?ignoreMods:Bool = false):String {
@@ -289,21 +345,24 @@ class Paths {
 		return false;
 	}
 
-	inline static public function getSparrowAtlas(key:String, ?library:String):FlxAtlasFrames {
-		var imageLoaded:FlxGraphic = returnGraphic(key);
+	inline static public function getSparrowAtlas(key:String, ?library:String = null, ?allowGPU:Bool = true):FlxAtlasFrames {
+		var imageLoaded:FlxGraphic = image(key, library, allowGPU);
 		var xmlExists:Bool = false;
-		if(FileSystem.exists(modsXml(key))) xmlExists = true;
 
-		return FlxAtlasFrames.fromSparrow((imageLoaded != null ? imageLoaded : image(key, library)), (xmlExists ? File.getContent(modsXml(key)) : file('images/$key.xml', library)));
+		var xml:String = modsXml(key);
+		if(FileSystem.exists(xml)) xmlExists = true;
+
+		return FlxAtlasFrames.fromSparrow(imageLoaded, (xmlExists ? File.getContent(xml) : getPath('images/$key.xml', library)));
 	}
 
-
-	inline static public function getPackerAtlas(key:String, ?library:String) {
-		var imageLoaded:FlxGraphic = returnGraphic(key);
+	inline static public function getPackerAtlas(key:String, ?library:String = null, ?allowGPU:Bool = true):FlxAtlasFrames {
+		var imageLoaded:FlxGraphic = image(key, library, allowGPU);
 		var txtExists:Bool = false;
-		if(FileSystem.exists(modsTxt(key))) txtExists = true;
+		
+		var txt:String = modsTxt(key);
+		if(FileSystem.exists(txt)) txtExists = true;
 
-		return FlxAtlasFrames.fromSpriteSheetPacker((imageLoaded != null ? imageLoaded : image(key, library)), (txtExists ? File.getContent(modsTxt(key)) : file('images/$key.txt', library)));
+		return FlxAtlasFrames.fromSpriteSheetPacker(imageLoaded, (txtExists ? File.getContent(txt) : getPath('images/$key.txt', library)));
 	}
 
 	inline static public function formatToSongPath(path:String) {
@@ -312,36 +371,6 @@ class Paths {
 
 		var path = invalidChars.split(path.replace(' ', '-')).join("-");
 		return hideChars.split(path).join("").toLowerCase();
-	}
-
-	// completely rewritten asset loading? fuck!
-	public static var currentTrackedAssets:Map<String, FlxGraphic> = [];
-	public static function returnGraphic(key:String, ?library:String) {
-		var modKey:String = modsImages(key);
-		if(FileSystem.exists(modKey)) {
-			if(!currentTrackedAssets.exists(modKey)) {
-				var newBitmap:BitmapData = BitmapData.fromFile(modKey);
-				var newGraphic:FlxGraphic = FlxGraphic.fromBitmapData(newBitmap, false, modKey);
-				newGraphic.persist = true;
-				currentTrackedAssets.set(modKey, newGraphic);
-			}
-			localTrackedAssets.push(modKey);
-			return currentTrackedAssets.get(modKey);
-		}
-
-		var path = getPath('images/$key.png', IMAGE, library);
-		//trace(path);
-		if (OpenFlAssets.exists(path, IMAGE)) {
-			if(!currentTrackedAssets.exists(path)) {
-				var newGraphic:FlxGraphic = FlxG.bitmap.add(path, false, path);
-				newGraphic.persist = true;
-				currentTrackedAssets.set(path, newGraphic);
-			}
-			localTrackedAssets.push(path);
-			return currentTrackedAssets.get(path);
-		}
-		trace("Failed to load " + path);
-		return null;
 	}
 
 	public static var currentTrackedSounds:Map<String, Sound> = [];

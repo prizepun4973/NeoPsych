@@ -85,8 +85,10 @@ class CharacterEditorState extends MusicBeatState
 	var cameraFollowPointer:FlxSprite;
 	var healthBarBG:FlxSprite;
 
-	override function create()
-	{
+	override function create() {
+
+		if(ClientPrefs.cacheOnGPU) Paths.clearStoredMemory();
+
 		//FlxG.sound.playMusic(Paths.music('breakfast'), 0.5);
 
 		camEditor = new FlxCamera();
@@ -207,6 +209,8 @@ class CharacterEditorState extends MusicBeatState
 
 		FlxG.mouse.visible = true;
 		reloadCharacterOptions();
+
+		if(ClientPrefs.cacheOnGPU) Paths.clearUnusedMemory();
 
 		super.create();
 	}
