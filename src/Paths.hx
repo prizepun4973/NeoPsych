@@ -183,7 +183,7 @@ class Paths {
 			return getPreloadPath('/ndlls/' + key + '.ndll');
 		}
 			
-		return 'mods/ndlls' + key + '.lua';
+		return 'mods/ndlls/' + key + '.lua';
 	}
 	static public function lua(key:String, ?library:String) {
 		if (FileSystem.exists(mods(currentModDirectory + '/' + key + '.lua')) && currentModDirectory != "") {

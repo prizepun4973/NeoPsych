@@ -64,13 +64,6 @@
 	<define name="hscriptPos" />
 	<define name="CUSTOM_CLASSES" />
 
-	<!-- Comment this out to prevent unused classes from being compiled.
-		 Reduces compilation time at the cost of limited HScript flexibility. !-->
-	<define name="COMPILE_ALL_CLASSES"/>
-
-	<!-- Comment this out to disable support for custom ndlls. !-->
-	<haxedef name="NDLLS_SUPPORTED" unless="web || iphonesim || hl" />
-
 	<!-- Disable it for more concise compilation errors. -->
 	<haxedef name="message.reporting" value="pretty" />
 
@@ -133,9 +126,6 @@
 	<!--Used for Izzy Engine's crash handler-->
 	<haxedef name="HXCPP_CHECK_POINTER"/>
 	<haxedef name="HXCPP_STACK_LINE"/>
-
-	<!--Video enviorment check-->
-	<define name="VIDEOS_ALLOWED" if="web || windows" unless="32bits"/>
 
 	<!-- _________________________________ Custom _______________________________ -->
 

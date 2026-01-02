@@ -18,7 +18,7 @@ import sys.FileSystem;
  * then an empty function will be returned instead, and a message will be shown in logs.
  */
 final class NdllUtil {
-	#if NDLLS_SUPPORTED
+	#if !(web || iphonesim || hl)
 		#if windows   public static final os:String = "windows";   #end
 		#if linux     public static final os:String = "linux";     #end
 		#if macos     public static final os:String = "mac";       #end
@@ -35,7 +35,7 @@ final class NdllUtil {
 	 * @param args Number of arguments of that function.
 	 */
 	public static function getFunction(ndll:String, name:String, args:Int):Dynamic {
-		#if NDLLS_SUPPORTED
+		#if !(web || iphonesim || hl)
 		var func:Dynamic = getFunctionFromPath(Paths.ndll('$ndll-$os'), name, args);
 
 		return Reflect.makeVarArgs(function(a:Array<Dynamic>) {
@@ -57,7 +57,7 @@ final class NdllUtil {
 	 * @param args Number of arguments of that function.
 	 */
 	public static function getFunctionFromPath(ndll:String, name:String, args:Int):Dynamic {
-		#if NDLLS_SUPPORTED
+		#if !(web || iphonesim || hl)
 		if (!FileSystem.exists(ndll)) {
 			trace('Couldn\'t find ndll at ${ndll}.');
 			return noop;

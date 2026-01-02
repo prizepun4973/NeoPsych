@@ -14,6 +14,7 @@ import flixel.graphics.FlxGraphic;
 import flixel.graphics.frames.FlxFramesCollection;
 import flixel.graphics.frames.FlxFrame;
 import flixel.util.FlxColor;
+import flixel.FlxG;
 #if desktop
 import sys.FileSystem;
 import sys.io.File;
@@ -97,6 +98,15 @@ class AtlasFrameMaker extends FlxFramesCollection
 			{
 				sizeInfo = t.getBounds(t);
 				var bitmapShit:BitmapData = new BitmapData(Std.int(sizeInfo.width + sizeInfo.x), Std.int(sizeInfo.height + sizeInfo.y), true, 0);
+				if (ClientPrefs.cacheOnGPU)
+				{
+					var texture:openfl.display3D.textures.RectangleTexture = FlxG.stage.context3D.createRectangleTexture(bitmapShit.width, bitmapShit.height, BGRA, true);
+					texture.uploadFromBitmapData(bitmapShit);
+					bitmapShit.image.data = null;
+					bitmapShit.dispose();
+					bitmapShit.disposeImage();
+					bitmapShit = BitmapData.fromTexture(texture);
+				}
 				bitmapShit.draw(t, null, null, null, null, true);
 				bitMapArray.push(bitmapShit);
 
@@ -108,7 +118,7 @@ class AtlasFrameMaker extends FlxFramesCollection
 			}
 			else break;
 		}
-		
+
 		for (i in 0...bitMapArray.length)
 		{
 			var b = FlxGraphic.fromBitmapData(bitMapArray[i]);
