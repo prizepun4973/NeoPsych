@@ -71,10 +71,6 @@ class TitleState extends InjectedState
 	var titleTextColors:Array<FlxColor> = [0xFF33FFFF, 0xFF3333CC];
 	var titleTextAlphas:Array<Float> = [1, .64];
 
-	var curWacky:Array<String> = [];
-
-	var wackyImage:FlxSprite;
-
 	var mustUpdate:Bool = false;
 
 	var titleJSON:TitleData;
@@ -120,8 +116,6 @@ class TitleState extends InjectedState
 		FlxG.keys.preventDefaultKeys = [TAB];
 
 		funkin.options.PlayerSettings.init();
-
-		curWacky = FlxG.random.getObject(getIntroTextShit());
 
 		// DEBUG BULLSHIT
 
@@ -359,21 +353,6 @@ class TitleState extends InjectedState
 			initialized = true;
 
 		// credGroup.add(credTextShit);
-	}
-
-	function getIntroTextShit():Array<Array<String>>
-	{
-		var fullText:String = Assets.getText(Paths.txt('introText'));
-
-		var firstArray:Array<String> = fullText.split('\n');
-		var swagGoodArray:Array<Array<String>> = [];
-
-		for (i in firstArray)
-		{
-			swagGoodArray.push(i.split('--'));
-		}
-
-		return swagGoodArray;
 	}
 
 	var transitioning:Bool = false;

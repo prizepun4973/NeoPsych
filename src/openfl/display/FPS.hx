@@ -71,8 +71,7 @@ class FPS extends TextField
 		currentTime += deltaTime;
 		times.push(currentTime);
 
-		while (times[0] < currentTime - 1000)
-		{
+		while (times[0] < currentTime - 1000) {
 			times.shift();
 		}
 

@@ -1660,7 +1660,6 @@ class PlayState extends MusicBeatState {
 	public var canReset:Bool = true;
 	var startedCountdown:Bool = false;
 	var canPause:Bool = true;
-	var limoSpeed:Float = 0;
 
 	override public function update(elapsed:Float) {
 		/*if (FlxG.keys.justPressed.NINE)
