@@ -398,6 +398,16 @@ class TitleState extends InjectedState
 			titleTimer += CoolUtil.boundTo(elapsed, 0, 1);
 			if (titleTimer > 2) titleTimer -= 2;
 		}
+		
+		if (initialized && transitioning && skippedIntro)
+		{
+			if(pressedEnter)
+			{
+				FlxG.camera.flash(ClientPrefs.flashing ? FlxColor.WHITE : 0x4CFFFFFF, 0, function () {}, true);
+				MusicBeatState.switchState(new MainMenuState());
+				closedState = true;
+			}
+		}
 
 		if (initialized && !transitioning && skippedIntro)
 		{
@@ -426,21 +436,8 @@ class TitleState extends InjectedState
 				transitioning = true;
 				// FlxG.sound.music.stop();
 
-				var transTimer:FlxTimer = new FlxTimer().start(1, function(tmr:FlxTimer)
-				{
-					MusicBeatState.switchState(new MainMenuState());
-					closedState = true;
-				});
-
-				if (FlxG.keys.justPressed.ENTER || controls.ACCEPT) {
-					FlxG.camera.flash(ClientPrefs.flashing ? FlxColor.WHITE : 0x4CFFFFFF, 0, function () {}, true);
-					transTimer.cancel();
-					MusicBeatState.switchState(new MainMenuState());
-					closedState = true;
-				}
 				// FlxG.sound.play(Paths.music('titleShoot'), 0.7);
 			}
-		
 		}
 
 		if (initialized && pressedEnter && !skippedIntro)
