@@ -167,7 +167,7 @@ class HScript extends Script {
 		for (i in registeredClass) {
 			var result = Type.resolveClass(i.className != "" ? i.classPackage + "." + i.className : i.className);
 			if (result == null) registeredClass.remove(i);
-			else trace('Loadded lib: $result');
+			else trace('Loaded lib: $result');
 		}
 	}
 }

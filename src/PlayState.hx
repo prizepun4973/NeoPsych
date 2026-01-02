@@ -289,6 +289,8 @@ class PlayState extends MusicBeatState {
 		// for lua
 		instance = this;
 
+		ClientPrefs.resetPlayStateStuff();
+
 		debugKeysChart = ClientPrefs.copyKey(ClientPrefs.keyBinds.get('debug_1'));
 		debugKeysCharacter = ClientPrefs.copyKey(ClientPrefs.keyBinds.get('debug_2'));
 		PauseSubState.songName = null; //Reset to default
@@ -643,20 +645,17 @@ class PlayState extends MusicBeatState {
 		healthBar.scrollFactor.set();
 		// healthBar
 		healthBar.visible = !ClientPrefs.hideHud;
-		healthBar.alpha = ClientPrefs.healthBarAlpha;
 		add(healthBar);
 		healthBarBG.sprTracker = healthBar;
 
 		iconP1 = new HealthIcon(boyfriend.healthIcon, true);
 		iconP1.y = healthBar.y - 75;
 		iconP1.visible = !ClientPrefs.hideHud;
-		iconP1.alpha = ClientPrefs.healthBarAlpha;
 		add(iconP1);
 
 		iconP2 = new HealthIcon(dad.healthIcon, false);
 		iconP2.y = healthBar.y - 75;
 		iconP2.visible = !ClientPrefs.hideHud;
-		iconP2.alpha = ClientPrefs.healthBarAlpha;
 		add(iconP2);
 		reloadHealthBarColors();
 
@@ -751,9 +750,7 @@ class PlayState extends MusicBeatState {
 
 		if (PauseSubState.songName != null) {
 			precacheList.set(PauseSubState.songName, 'music');
-		} else if(ClientPrefs.pauseMusic != 'None') {
-			precacheList.set(Paths.formatToSongPath(ClientPrefs.pauseMusic), 'music');
-		}
+		} else precacheList.set('breakfast', 'music');
 
 		precacheList.set('alphabet', 'image');
 	
@@ -899,14 +896,17 @@ class PlayState extends MusicBeatState {
 	}
 
 	public function addTextToDebug(text:String, color:FlxColor) {
-		luaDebugGroup.forEachAlive(function(spr:DebugLuaText) { spr.y += 20; });
 
-		if(luaDebugGroup.members.length > 34) {
-			var blah = luaDebugGroup.members[34];
-			blah.destroy();
-			luaDebugGroup.remove(blah);
-		}
-		luaDebugGroup.insert(0, new DebugLuaText(text, luaDebugGroup, color));
+		var newText:DebugLuaText = luaDebugGroup.recycle(DebugLuaText);
+		newText.text = text;
+		newText.color = color;
+		newText.disableTime = 6;
+		newText.alpha = 1;
+		newText.setPosition(10, 8 - newText.height);
+
+		luaDebugGroup.forEachAlive(function(spr:DebugLuaText) { spr.y += newText.height + 2; });
+
+		luaDebugGroup.add(newText);
 	}
 
 	public function reloadHealthBarColors() {
@@ -1114,11 +1114,9 @@ class PlayState extends MusicBeatState {
 		startTimer = new FlxTimer().start(Conductor.crochet / 1000 / playbackRate, function(tmr:FlxTimer) {
 
 			notes.forEachAlive(function(note:Note) {
-				if(ClientPrefs.opponentStrums || note.mustPress) {
-					note.copyAlpha = false;
-					note.alpha = note.multAlpha;
-					if(ClientPrefs.middleScroll && !note.mustPress) note.alpha *= 0.35;
-				}
+				note.copyAlpha = false;
+				note.alpha = note.multAlpha;
+				if(ClientPrefs.middleScroll && !note.mustPress) note.alpha *= 0.35;
 			});
 			
 			swagCounter++;
@@ -1527,8 +1525,7 @@ class PlayState extends MusicBeatState {
 			// FlxG.log.add(i);
 			var targetAlpha:Float = 1;
 			if (player < 1) {
-				if(!ClientPrefs.opponentStrums) targetAlpha = 0;
-				else if(ClientPrefs.middleScroll) targetAlpha = 0.35;
+				if(ClientPrefs.middleScroll) targetAlpha = 0.35;
 			}
 
 			var babyArrow:StrumNote = new StrumNote(ClientPrefs.middleScroll ? STRUM_X_MIDDLESCROLL : STRUM_X, strumLine.y, i, player);
@@ -3068,6 +3065,9 @@ class PlayState extends MusicBeatState {
 		}
 		FlxAnimationController.globalSpeed = 1;
 		FlxG.sound.music.pitch = 1;
+
+		ClientPrefs.resetPlayStateStuff();
+
 		super.destroy();
 	}
 
@@ -3280,7 +3280,7 @@ class PlayState extends MusicBeatState {
 		+ ' | Rating: ' + ratingName
 		+ (ratingName != '?' ? ' (${Highscore.floorDecimal(ratingPercent * 100, 2)}%) - $ratingFC' : '');
  
-		if(ClientPrefs.scoreZoom && !badHit && !cpuControlled) {
+		if(!badHit && !cpuControlled) {
 			if(scoreTxtTween != null) scoreTxtTween.cancel();
 			scoreTxt.scale.x = 1.075;
 			scoreTxt.scale.y = 1.075;

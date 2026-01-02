@@ -56,8 +56,7 @@ class NoteOffsetState extends InjectedState
 		this.parent = parent;
 	}
 
-	override public function create()
-	{
+	override public function create() {
 		super.create();
 		if (call("onCreate", [])) return;
 
@@ -481,7 +480,7 @@ class NoteOffsetState extends InjectedState
 	function updateNoteDelay()
 	{
 		ClientPrefs.noteOffset = Math.round(barPercent);
-		timeTxt.text = 'Current offset: ' + Math.floor(barPercent) + ' ms';
+		timeTxt.text = 'Audio offset: ' + Math.floor(barPercent) + ' ms';
 	}
 
 	function updateMode()

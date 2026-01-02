@@ -12,7 +12,6 @@ import funkin.CoolUtil;
 class ClientPrefs {
 	public static var downScroll:Bool = false;
 	public static var middleScroll:Bool = false;
-	public static var opponentStrums:Bool = true;
 	public static var showFPS:Bool = true;
 	public static var flashing:Bool = true;
 	public static var globalAntialiasing:Bool = true;
@@ -29,12 +28,9 @@ class ClientPrefs {
 	public static var arrowHSV:Array<Array<Int>> = [[0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0]];
 	public static var ghostTapping:Bool = true;
 	public static var timeBarType:String = 'Time Left';
-	public static var scoreZoom:Bool = true;
 	public static var noReset:Bool = false;
-	public static var healthBarAlpha:Float = 1;
 	public static var controllerMode:Bool = false;
 	public static var hitsoundVolume:Float = 0;
-	public static var pauseMusic:String = 'Tea Time';
 	public static var checkForUpdates:Bool = true;
 	public static var comboStacking = true;
 	public static var softLostFrame = true;
@@ -93,6 +89,16 @@ class ClientPrefs {
 	];
 	public static var defaultKeys:Map<String, Array<FlxKey>> = null;
 
+	public static function resetPlayStateStuff() {
+		ClientPrefs.arrowHSV = [[0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0]];
+		ClientPrefs.comboOffset = [0, 0, 0, 0];
+		ClientPrefs.ratingOffset = 0;
+		ClientPrefs.sickWindow = 45;
+		ClientPrefs.goodWindow = 90;
+		ClientPrefs.badWindow = 135;
+		ClientPrefs.safeFrames = 10;
+	}
+
 	public static function loadDefaultKeys() {
 		defaultKeys = keyBinds.copy();
 		//trace(defaultKeys);
@@ -101,7 +107,6 @@ class ClientPrefs {
 	public static function saveSettings() {
 		FlxG.save.data.downScroll = downScroll;
 		FlxG.save.data.middleScroll = middleScroll;
-		FlxG.save.data.opponentStrums = opponentStrums;
 		FlxG.save.data.showFPS = showFPS;
 		FlxG.save.data.flashing = flashing;
 		FlxG.save.data.globalAntialiasing = globalAntialiasing;
@@ -115,12 +120,9 @@ class ClientPrefs {
 		FlxG.save.data.camZooms = camZooms;
 		FlxG.save.data.noteOffset = noteOffset;
 		FlxG.save.data.hideHud = hideHud;
-		FlxG.save.data.arrowHSV = arrowHSV;
 		FlxG.save.data.ghostTapping = ghostTapping;
 		FlxG.save.data.timeBarType = timeBarType;
-		FlxG.save.data.scoreZoom = scoreZoom;
 		FlxG.save.data.noReset = noReset;
-		FlxG.save.data.healthBarAlpha = healthBarAlpha;
 		FlxG.save.data.comboOffset = comboOffset;
 		FlxG.save.data.ratingOffset = ratingOffset;
 		FlxG.save.data.sickWindow = sickWindow;
@@ -130,7 +132,6 @@ class ClientPrefs {
 		FlxG.save.data.gameplaySettings = gameplaySettings;
 		FlxG.save.data.controllerMode = controllerMode;
 		FlxG.save.data.hitsoundVolume = hitsoundVolume;
-		FlxG.save.data.pauseMusic = pauseMusic;
 		FlxG.save.data.checkForUpdates = checkForUpdates;
 		FlxG.save.data.comboStacking = comboStacking;
 	
@@ -149,9 +150,6 @@ class ClientPrefs {
 		}
 		if(FlxG.save.data.middleScroll != null) {
 			middleScroll = FlxG.save.data.middleScroll;
-		}
-		if(FlxG.save.data.opponentStrums != null) {
-			opponentStrums = FlxG.save.data.opponentStrums;
 		}
 		if(FlxG.save.data.showFPS != null) {
 			showFPS = FlxG.save.data.showFPS;
@@ -202,23 +200,14 @@ class ClientPrefs {
 		if(FlxG.save.data.noteOffset != null) {
 			noteOffset = FlxG.save.data.noteOffset;
 		}
-		if(FlxG.save.data.arrowHSV != null) {
-			arrowHSV = FlxG.save.data.arrowHSV;
-		}
 		if(FlxG.save.data.ghostTapping != null) {
 			ghostTapping = FlxG.save.data.ghostTapping;
 		}
 		if(FlxG.save.data.timeBarType != null) {
 			timeBarType = FlxG.save.data.timeBarType;
 		}
-		if(FlxG.save.data.scoreZoom != null) {
-			scoreZoom = FlxG.save.data.scoreZoom;
-		}
 		if(FlxG.save.data.noReset != null) {
 			noReset = FlxG.save.data.noReset;
-		}
-		if(FlxG.save.data.healthBarAlpha != null) {
-			healthBarAlpha = FlxG.save.data.healthBarAlpha;
 		}
 		if(FlxG.save.data.comboOffset != null) {
 			comboOffset = FlxG.save.data.comboOffset;
@@ -244,9 +233,6 @@ class ClientPrefs {
 		}
 		if(FlxG.save.data.hitsoundVolume != null) {
 			hitsoundVolume = FlxG.save.data.hitsoundVolume;
-		}
-		if(FlxG.save.data.pauseMusic != null) {
-			pauseMusic = FlxG.save.data.pauseMusic;
 		}
 		if(FlxG.save.data.gameplaySettings != null)
 		{
