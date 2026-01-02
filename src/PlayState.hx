@@ -3381,14 +3381,11 @@ class ModchartText extends FlxText {
 }
 
 class DebugLuaText extends FlxText {
-	private var disableTime:Float = 6;
+	public var disableTime:Float = 6;
+	public function new() {
+		super(10, 10, 0, '', 16);
 
-	public var parentGroup:FlxTypedGroup<DebugLuaText>;
-
-	public function new(text:String, parentGroup:FlxTypedGroup<DebugLuaText>, color:FlxColor) {
-		this.parentGroup = parentGroup;
-		super(10, 10, 0, text, 16);
-		setFormat(Paths.font("vcr.ttf"), 16, color, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+		setFormat(Paths.font("vcr.ttf"), 16, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		scrollFactor.set();
 		borderSize = 1;
 	}
@@ -3396,7 +3393,9 @@ class DebugLuaText extends FlxText {
 	override function update(elapsed:Float) {
 		super.update(elapsed);
 		disableTime -= elapsed;
-		if (disableTime < 0) disableTime = 0;
-		if (disableTime < 1) alpha = disableTime;
+		if(disableTime < 0) disableTime = 0;
+		if(disableTime < 1) alpha = disableTime;
+
+		if(alpha == 0 || y >= FlxG.height) kill();
 	}
 }
