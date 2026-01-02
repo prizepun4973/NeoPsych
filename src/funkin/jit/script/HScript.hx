@@ -155,7 +155,7 @@ class HScript extends Script {
     }
 
 	public static function loadMappings() {
-		if (!FileSystem.exists("mappings.json")) return;
+		if (!FileSystem.exists("manifest/mappings.json")) return;
 		try {
 			registeredClass = cast haxe.Json.parse(File.getContent("manifest/mappings.json"));
 		}
@@ -167,7 +167,7 @@ class HScript extends Script {
 		for (i in registeredClass) {
 			var result = Type.resolveClass(i.className != "" ? i.classPackage + "." + i.className : i.className);
 			if (result == null) registeredClass.remove(i);
-			else trace(result);
+			else trace('Loadded lib: $result');
 		}
 	}
 }

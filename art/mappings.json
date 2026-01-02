@@ -33,7 +33,7 @@
     },
     {
         "className": "ShaderFilter",
-        "classPackage": "openfl.fiLters"
+        "classPackage": "openfl.filters"
     },
     {
         "className": "PlayState",

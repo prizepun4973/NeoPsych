@@ -1,6 +1,3 @@
-[submodule "art"]
-	path = art/icons
-	url = https://github.com/prizepun4973/art
 [submodule "assets"]
 	path = assets
 	url = https://github.com/prizepun4973/assets
@@ -9,4 +6,10 @@
 	url = https://github.com/prizepun4973/modTemplate
 [submodule "mods/modTemplate"]
 	path = mods/modTemplate
+	url = https://github.com/prizepun4973/modTemplate
+[submodule "art/icons"]
+	path = art/icons
+	url = https://github.com/prizepun4973/art
+[submodule "art/mods"]
+	path = art/mods
 	url = https://github.com/prizepun4973/modTemplate
