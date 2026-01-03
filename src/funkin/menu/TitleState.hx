@@ -399,14 +399,10 @@ class TitleState extends InjectedState
 			if (titleTimer > 2) titleTimer -= 2;
 		}
 		
-		if (initialized && transitioning && skippedIntro)
-		{
-			if(pressedEnter)
-			{
-				FlxG.camera.flash(ClientPrefs.flashing ? FlxColor.WHITE : 0x4CFFFFFF, 0, function () {}, true);
-				MusicBeatState.switchState(new MainMenuState());
-				closedState = true;
-			}
+		if (initialized && transitioning && skippedIntro && pressedEnter) {
+			FlxG.camera.flash(ClientPrefs.flashing ? FlxColor.WHITE : 0x4CFFFFFF, 0, function () {}, true);
+			MusicBeatState.switchState(new MainMenuState());
+			closedState = true;
 		}
 
 		if (initialized && !transitioning && skippedIntro)

@@ -2340,7 +2340,7 @@ class PlayState extends MusicBeatState {
 	public var transitioning = false;
 	public function endSong():Void {
 
-		if (callOnLuas('onEndSong', [], false) != FunkinLua.Function_Stop || callEvent('onSongEnd', new Cancellable()).cancelled || transitioning) return;
+		if (callOnLuas('onEndSong', [], false) == FunkinLua.Function_Stop || callEvent('onSongEnd', new Cancellable()).cancelled || transitioning) return;
 
 		//Should kill you if you tried to cheat
 		if(!startingSong) {
@@ -2636,18 +2636,18 @@ class PlayState extends MusicBeatState {
 			daNote.gfNote ? gf : boyfriend,
 			Std.int(Math.abs(daNote.noteData))
 		));
-		
-		if (!event.deleteNote) notes.forEachAlive(function(note:Note) {
-			if (daNote != note && daNote.mustPress && daNote.noteData == note.noteData && daNote.isSustainNote == note.isSustainNote && Math.abs(daNote.strumTime - note.strumTime) < 1) {
-				note.kill();
-				notes.remove(note, true);
-				note.destroy();
-			}
-		});
 
 		if (callOnLuas('noteMiss', [notes.members.indexOf(daNote), daNote.noteData, daNote.noteType, daNote.isSustainNote]) == FunkinLua.Function_Stop || event.cancelled) {
 			callOnLuas('noteMissPost', [notes.members.indexOf(daNote), daNote.noteData, daNote.noteType, daNote.isSustainNote]);
 			callEvent('onPostPlayerMiss', event);
+			
+			if (!event.deleteNote) notes.forEachAlive(function(note:Note) {
+				if (daNote != note && daNote.mustPress && daNote.noteData == note.noteData && daNote.isSustainNote == note.isSustainNote && Math.abs(daNote.strumTime - note.strumTime) < 1) {
+					note.kill();
+					notes.remove(note, true);
+					note.destroy();
+				}
+			});
 			return;
 		}
 
@@ -2675,6 +2675,14 @@ class PlayState extends MusicBeatState {
 
 		callOnLuas('noteMissPost', [notes.members.indexOf(daNote), daNote.noteData, daNote.noteType, daNote.isSustainNote]);
 		callEvent('onPostPlayerMiss', event);
+		
+		if (!event.deleteNote) notes.forEachAlive(function(note:Note) {
+			if (daNote != note && daNote.mustPress && daNote.noteData == note.noteData && daNote.isSustainNote == note.isSustainNote && Math.abs(daNote.strumTime - note.strumTime) < 1) {
+				note.kill();
+				notes.remove(note, true);
+				note.destroy();
+			}
+		});
 	}
 
 	function noteMissPress(direction:Int = 1):Void { //You pressed a key when there was no notes to press for this key
@@ -2731,15 +2739,15 @@ class PlayState extends MusicBeatState {
 		callEvent('onDadHit', event);
 
 		if (event.cancelled || note.ignoreNote) {
-			
+
+			callOnLuas('opponentNoteHit', [notes.members.indexOf(note), Math.abs(note.noteData), note.noteType, note.isSustainNote]);
+			callEvent('onPostNoteHit', event);
+
 			if (!note.isSustainNote && event.deleteNote) {
 				note.kill();
 				notes.remove(note, true);
 				note.destroy();
 			}
-
-			callOnLuas('opponentNoteHit', [notes.members.indexOf(note), Math.abs(note.noteData), note.noteType, note.isSustainNote]);
-			callEvent('onPostNoteHit', event);
 
 			return;
 		}
@@ -2762,13 +2770,7 @@ class PlayState extends MusicBeatState {
 		var time:Float = 0.15;
 		if(note.isSustainNote && !note.animation.curAnim.name.endsWith('end')) time += 0.15;
 		if (!event.strumGlowCancelled) StrumPlayAnim(true, Std.int(Math.abs(note.noteData)), time);
-		note.hitByOpponent = true;
-
-		if (!note.isSustainNote && event.deleteNote) {
-			note.kill();
-			notes.remove(note, true);
-			note.destroy();
-		}
+		note.hitByOpponent = true;	
 
 		if(note.noteType == 'Hey!' && dad.animOffsets.exists('hey')) {
 			dad.playAnim('hey', true);
@@ -2778,6 +2780,12 @@ class PlayState extends MusicBeatState {
 
 		callOnLuas('opponentNoteHit', [notes.members.indexOf(note), Math.abs(note.noteData), note.noteType, note.isSustainNote]);
 		callEvent('onPostNoteHit', event);
+		
+		if (!note.isSustainNote && event.deleteNote) {
+			note.kill();
+			notes.remove(note, true);
+			note.destroy();
+		}
 	}
 
 	function goodNoteHit(note:Note):Void {
@@ -2805,13 +2813,13 @@ class PlayState extends MusicBeatState {
 		if (ClientPrefs.hitsoundVolume > 0 && !note.hitsoundDisabled) FlxG.sound.play(Paths.sound('hitsound'), ClientPrefs.hitsoundVolume);
 
 		if (event.cancelled) {
+			callEvent('onPostNoteHit', event);
+
 			if (!note.isSustainNote && event.deleteNote) {
 				note.kill();
 				notes.remove(note, true);
 				note.destroy();
 			}
-
-			callEvent('onPostNoteHit', event);
 			return;
 		}
 
@@ -3003,15 +3011,15 @@ class PlayState extends MusicBeatState {
 		var isSus:Bool = note.isSustainNote;
 		var leData:Int = Math.round(Math.abs(note.noteData));
 		var leType:String = note.noteType;
+
 		callOnLuas('goodNoteHit', [notes.members.indexOf(note), leData, leType, isSus]);
-		
+		callEvent('onPostNoteHit', event);
+
 		if (!note.isSustainNote && event.deleteNote) {
 			note.kill();
 			notes.remove(note, true);
 			note.destroy();
 		}
-		
-		callEvent('onPostNoteHit', event);
 	}
 
 	public function spawnNoteSplashOnNote(note:Note) {
