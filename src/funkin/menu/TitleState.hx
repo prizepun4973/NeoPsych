@@ -403,6 +403,7 @@ class TitleState extends InjectedState
 			FlxG.camera.flash(ClientPrefs.flashing ? FlxColor.WHITE : 0x4CFFFFFF, 0, function () {}, true);
 			MusicBeatState.switchState(new MainMenuState());
 			closedState = true;
+			persistentUpdate = false;
 		}
 
 		if (initialized && !transitioning && skippedIntro)
@@ -432,6 +433,11 @@ class TitleState extends InjectedState
 				transitioning = true;
 				// FlxG.sound.music.stop();
 
+				new FlxTimer().start(1, function(tmr:FlxTimer)
+				{
+					MusicBeatState.switchState(new MainMenuState());
+					closedState = true;
+				});
 				// FlxG.sound.play(Paths.music('titleShoot'), 0.7);
 			}
 		}

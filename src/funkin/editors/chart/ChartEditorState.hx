@@ -46,14 +46,16 @@ class ChartEditorState extends InjectedState {
     public static var nextUpdateTime:Float;
     
     public var paused:Bool = true;
-    public static var undos:Array<EditorAction> = new Array();
-    public static var redos:Array<EditorAction> = new Array();
+    public static var undos:Array<EditorAction> = [];
+    public static var redos:Array<EditorAction> = [];
+
+    public var data:Array<Map<String, Dynamic>> = [];
 
     public var beatSnap:Int = 32;
 
     // data
     public var _song:SwagSong;
-    private var sectionBPM:Array<Float> = new Array();
+    private var sectionBPM:Array<Float> = [];
 
     // audio
     private var vocals:FlxSound = null;
@@ -78,8 +80,8 @@ class ChartEditorState extends InjectedState {
         lastUpdateTime = 0;
         nextUpdateTime = 0;
         curSec = 0;
-        undos = new Array<EditorAction>();
-        redos = new Array<EditorAction>();
+        undos = [];
+        redos = [];
     }
     
     public static function getMousePos() {
@@ -125,9 +127,10 @@ class ChartEditorState extends InjectedState {
         renderNotes.remove(element);
     }
 
-    public function addElement(element:GuiElement, wasSelected:Bool = false) {
+    public function addElement(element:GuiElement, pushData:Bool = false) {
         renderNotes.add(element);
-        if (wasSelected) selectIndicator.add(new SelectIndicator(element));
+        element.dataID = data.length - 1;
+        if (data[element.dataID].exists('wasSelected')) if (data[element.dataID].get('wasSelected')) selectIndicator.add(new SelectIndicator(element));
     }
 
     public function addAction(action:EditorAction) {
@@ -356,13 +359,13 @@ class ChartEditorState extends InjectedState {
 
         for (section in _song.notes) {
             for (note in section.sectionNotes) {
-                var guiNote:GuiNote = new GuiNote(note[0], Std.int(section.mustHitSection ? (note[1] < 4 ? note[1] + 4 : note[1] - 4) : note[1]), note[2]);
+                var guiNote:GuiNote = new GuiNote(true, note[0], Std.int(section.mustHitSection ? (note[1] < 4 ? note[1] + 4 : note[1] - 4) : note[1]), note[2], null);
                 if (note.length > 3) if (Std.isOfType(note[3], String)) guiNote.noteType = note[3];
             }
         }
 
         for (event in _song.events) {
-            var guiEventNote:GuiEventNote = new GuiEventNote(event[0], event[1]);
+            var guiEventNote:GuiEventNote = new GuiEventNote(true, event[0], event[1], null);
             renderNotes.add(guiEventNote);
         }
 
@@ -585,11 +588,14 @@ class Crosshair extends FlxSprite {
 
 class GuiElement extends FlxSprite {
     public var strumTime:Float = 0;
+    public var dataID:Int;
+    public var editor:ChartEditorState = ChartEditorState.INSTANCE;
     public var relatedAction:EditorAction;
     public var relatedRemove:EditorAction;
 
-    public function new(X:Float = 0, Y:Float = 0) {
-        super(X, Y);
+    public function new(strumTime:Float) {
+        super(0, 0);
+        this.strumTime = strumTime;
     }
 
     override function update(elapsed:Float) {
@@ -603,6 +609,7 @@ class GuiElement extends FlxSprite {
 
 abstract class EditorAction {
     public var editor:ChartEditorState = ChartEditorState.INSTANCE;
+    public var dataID:Int;
     public function new() {}
     public function redo() {}
     public function undo() {}

@@ -8,6 +8,7 @@ import funkin.editors.chart.action.NoteAddAction;
 import funkin.editors.chart.element.*;
 import funkin.game.component.Note.EventNote;
 import flixel.FlxG;
+import flixel.FlxSprite;
 
 typedef ElementRemoveData = {
     var events:Array<EventNote>;
@@ -21,100 +22,41 @@ typedef ElementRemoveData = {
 
 class ElementRemoveAction extends ChartEditorState.EditorAction {
     public var elements:Array<GuiElement> = new Array();
-    public var datas:Array<ElementRemoveData> = new Array();
-    public var relatedActions:Array<EditorAction> = new Array();
+    public var datas:Array<Int> = new Array();
 
     public function new(elements:Array<GuiElement>) {
         super();
 
-        for (element in elements) {
-            var selected:Bool = false;
-            editor.selectIndicator.forEachAlive(function (indicator:SelectIndicator) {
-                if (indicator.target == element) selected = true;
-            });
-
-            var data:ElementRemoveData = {
-                events: [],
-                strumTime: 0,
-                noteData: 0,
-                susLength: 0,
-                noteType: "",
-                relatedAction: null,
-                wasSelected: false
-            };
-            if (Std.isOfType(element, GuiNote)) {
-                var note:GuiNote = cast (element, GuiNote);
-
-                data = {
-                    events: null,
-                    strumTime: note.strumTime,
-                    noteData: note.noteData,
-                    susLength: note.susLength,
-                    noteType: note.noteType,
-                    relatedAction: note.relatedAction,
-                    wasSelected: selected
-                };
-
-            }
-            if (Std.isOfType(element, GuiEventNote)) {
-                var event = cast (element, GuiEventNote);
-
-                data = {
-                    events: event.events,
-                    strumTime: event.strumTime,
-                    noteData: 0,
-                    susLength: 0,
-                    noteType: "",
-                    relatedAction: null,
-                    wasSelected: selected
-                };
-            }
-
-            datas.push(data);
-            this.elements.push(element);
-        }
+        for (i in elements) datas.push(i.dataID);
 
         redo();
     }
 
     override function redo() {
-        for (element in elements) {
-            element.relatedRemove = this;
-            relatedActions.push(element.relatedAction);
-
-            editor.selectIndicator.forEachAlive(function (indicator:SelectIndicator) {
-                if (indicator.target == element) editor.selectIndicator.remove(indicator);
+        for (i in datas) {
+            editor.renderNotes.forEach(function (spr:FlxSprite) {
+                if (Std.isOfType(spr, GuiElement)) {
+                    var element:GuiElement = cast (spr, GuiElement);
+                    if (((Std.isOfType(element, GuiNote) && editor.data[i].exists('noteData')) || (Std.isOfType(element, GuiEventNote) && !editor.data[i].exists('noteData')))
+                        && element.strumTime == editor.data[i].get('strumTime')) editor.renderNotes.remove(element);
+                }
             });
-
-            if (Std.isOfType(element, GuiNote)) editor.renderNotes.remove((cast (element, GuiNote)).susTail);
-            editor.renderNotes.remove(element);
-            // note = null;
         }
     }
 
     override function undo() {
-        for (data in datas) {
-            // trace(datas);
-
-            if (data.events == null) {
-                var note:GuiNote = new GuiNote(data.strumTime, data.noteData, data.susLength, data.relatedAction);
-                note.noteType = data.noteType;
-                note.relatedRemove = this;
-                
-                elements.push(note);
-                // trace(note);
-
-                if (data.wasSelected) editor.selectIndicator.add(new SelectIndicator(note));
-            }
-            else {
-                var event:GuiEventNote = new GuiEventNote(data.strumTime, data.events);
-                event.relatedRemove = this;
-                
-                elements.push(event);
-                // trace(event);
-
-                editor.renderNotes.add(event);
-                if (data.wasSelected) editor.selectIndicator.add(new SelectIndicator(event));
+        for (i in datas) {
+            var data = editor.data[i];
+            if (editor.data[i].exists('noteData')) {
+                var note:GuiNote = new GuiNote(false, data.get('strumTime'), data.get('noteData'), data.get('susLength'));
+                note.noteType = data.get('noteType');
+                note.dataID = i;
+                editor.addElement(note);
+            } else {
+                var event:GuiEventNote = new GuiEventNote(false, data.get('strumTime'), null);
+                event.events = data.get('events');
+                event.dataID = i;
+                editor.addElement(event);
             }
         }
     }

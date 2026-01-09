@@ -27,7 +27,7 @@ class EventAddAction extends ChartEditorState.EditorAction {
     }
 
     override function redo() {
-        _event = new GuiEventNote(strumTime, events, this);
+        _event = new GuiEventNote(true, strumTime, events, this);
         if (wasSelected) editor.selectIndicator.add(new SelectIndicator(_event));
         editor.renderNotes.add(_event);
     }

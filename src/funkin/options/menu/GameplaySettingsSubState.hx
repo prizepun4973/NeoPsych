@@ -30,10 +30,6 @@ class GameplaySettingsSubState extends BaseOptionsMenu {
 	public function new() {
 		title = 'Gameplay Settings';
 		rpcTitle = 'Gameplay Settings Menu'; //for Discord Rich Presence
-
-		var option:Option = new Option('Delay And Combo', 'Press Confirm to switch to the Adjust Screen.', '', 'bool', false);
-		option.onChange = function () { LoadingState.loadAndSwitchState(new NoteOffsetState(funkin.options.OptionsState.INSTANCE.parent)); };
-		addOption(option);
 		
 		var option:Option = new Option('Judge Offset',
 			'Changes how late/early you have to hit for a "Sick!"\nHigher values mean you have to hit later.',
@@ -124,6 +120,17 @@ class GameplaySettingsSubState extends BaseOptionsMenu {
 			'controllerMode',
 			'bool',
 			false);
+		addOption(option);
+
+		var option:Option = new Option('GC Time',
+			'How frequently to run garbage collector\n(0 = Off, smaller value can causes FPS lags)',
+			'gcTime',
+			'int',
+			40);
+		option.displayFormat = '%vs';
+		option.scrollSpeed = 20;
+		option.minValue = 0;
+		option.maxValue = 180;
 		addOption(option);
 
 		super();

@@ -34,7 +34,7 @@ using StringTools;
 
 class OptionsState extends InjectedState
 {
-	var options:Array<String> = ['Controls', 'Graphics', 'Gameplay', 'Mods'];
+	var options:Array<String> = ['Controls', 'Audio Adjust', 'Graphics', 'Gameplay', 'Mods'];
 	private var grpOptions:FlxTypedGroup<Alphabet>;
 	private static var curSelected:Int = 0;
 	public static var menuBG:FlxSprite;
@@ -52,6 +52,8 @@ class OptionsState extends InjectedState
 		switch(label) {
 			case 'Controls':
 				openSubState(new ControlsSubState());
+			case 'Audio Adjust':
+				LoadingState.loadAndSwitchState(new NoteOffsetState(funkin.options.OptionsState.INSTANCE.parent));
 			case 'Graphics':
 				openSubState(new GraphicsSettingsSubState());
 			case 'Gameplay':

@@ -8,12 +8,16 @@ import funkin.game.component.Note.EventNote;
 class GuiEventNote extends GuiElement {
     public var events:Array<EventNote>;
 
-    public function new(strumTime:Float, events:Array<EventNote>, relatedAction = null) {
-        super(0, 0);
+    public function new(pushData:Bool, strumTime:Float, events:Array<EventNote>, ?relatedAction = null) {
+        super(strumTime);
 
-        this.strumTime = strumTime;
         this.events = events;
         this.relatedAction = relatedAction;
+
+        if (pushData) editor.data.push([
+            'strumTime' => strumTime,
+            'events' => events,
+        ]);
 
         loadGraphic(Paths.image("eventArrow"));
         setGraphicSize(ChartEditorState.GRID_SIZE, ChartEditorState.GRID_SIZE);

@@ -28,7 +28,7 @@ class NoteAddAction extends ChartEditorState.EditorAction {
     }
 
     override function redo() {
-        _note = new GuiNote(strumTime, noteData, 0, this);
+        _note = new GuiNote(true, strumTime, noteData, 0, this);
         if (relatedRemove != null) relatedRemove.elements.push(_note);
         editor.addElement(_note);
     }
