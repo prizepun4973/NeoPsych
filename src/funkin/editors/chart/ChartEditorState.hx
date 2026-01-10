@@ -33,6 +33,7 @@ import Conductor.BPMChangeEvent;
 import funkin.editors.chart.element.*;
 import funkin.editors.chart.action.*;
 import funkin.editors.ui.widget.*;
+import funkin.editors.ui.*;
 
 using StringTools;
 
@@ -272,8 +273,6 @@ class ChartEditorState extends funkin.editors.ui.EditorState {
     override function create() {
         super.create();
 
-        funkin.CoolUtil.editor = this;
-
         FlxG.mouse.visible = true;
         Conductor.songPosition = lastPos;
 
@@ -409,7 +408,18 @@ class ChartEditorState extends funkin.editors.ui.EditorState {
         textPanel.setFormat(Paths.font("vcr.ttf"), 16, FlxColor.WHITE, FlxTextAlign.LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
         hudGroup.add(textPanel);
 
-        tab = new funkin.editors.ui.EditorState.Tabs(['File', 'aaa'], [['ee'], ['1', '2']]);
+        tab = new funkin.editors.ui.EditorState.Tabs(this, 
+            ['File', 'aaa'], [
+
+            ['ee'], 
+            ['1', '2']
+        ]);
+
+        tab.onClick = function (column:Int, line:Int) {
+            var test:EditorSubState = new EditorSubState('idk');
+            test.addButton(40, 40, 'aaa', function() {trace('hi');});
+            openSubState(test);
+        };
 
         updateCurSec();
     }
@@ -503,7 +513,6 @@ class ChartEditorState extends funkin.editors.ui.EditorState {
             funkin.component.MusicBeatState.switchState(new funkin.editors.ChartingState());
         }
     }
-    
 
     function actionListener() {
         if (crosshair.visible) {

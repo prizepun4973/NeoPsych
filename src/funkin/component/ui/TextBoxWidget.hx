@@ -1,0 +1,31 @@
+package funkin.component.ui;
+
+import flixel.FlxG;
+import flixel.text.FlxText;
+import flixel.util.FlxColor;
+
+class TextBoxWidget extends flixel.FlxSprite {
+    var onChange:Void -> Void;
+    var text:FlxText;
+
+    public override function new(parent:flixel.group.FlxGroup.FlxTypedGroup<flixel.FlxBasic>, X:Float, Y:Float\, buttonText:String, onClick:Void -> Void) {
+        super(X, Y);
+        
+        text = new FlxText(X + 2, Y + 2, 400, buttonText, 18);
+        text.wordWrap = false;
+        text.autoSize = true;
+        text.setFormat(Paths.font("vcr.ttf"), 18, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+
+        makeGraphic(Std.int(text.width) + 4, Std.int(text.height) + 4);
+
+        parent.add(this);
+        parent.add(text);
+        this.onClick = onClick;
+    }
+
+    override function update(elapsed:Float) {
+        super.update(elapsed);
+        if (FlxG.mouse.x > x && FlxG.mouse.x < x + width && FlxG.mouse.y > y && FlxG.mouse.y < y + height && FlxG.mouse.justReleased)
+            onClick();
+    }
+}

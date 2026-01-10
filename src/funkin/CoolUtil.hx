@@ -36,8 +36,6 @@ class CoolUtil
 
 	public static var difficulties:Array<String> = [];
 
-	public static var editor:FlxState;
-
 	inline public static function quantize(f:Float, snap:Float){
 		// changed so this actually works lol
 		var m:Float = Math.fround(f * snap);

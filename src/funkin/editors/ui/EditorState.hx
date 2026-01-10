@@ -2,12 +2,11 @@ package funkin.editors.ui;
 
 import flixel.FlxSprite;
 import flixel.group.FlxGroup.FlxTypedGroup;
-import funkin.jit.InjectedState;
 import flixel.FlxG;
 import flixel.text.FlxText;
 import flixel.util.FlxColor;
 
-class EditorState extends InjectedState {
+class EditorState extends funkin.jit.InjectedState{
     public var hudGroup:FlxTypedGroup<FlxSprite> = new FlxTypedGroup();
     public var tab:Tabs;
 
@@ -32,13 +31,13 @@ class EditorState extends InjectedState {
 }
 
 class Tabs {
-    public var editor:funkin.editors.ui.EditorState = cast funkin.CoolUtil.editor;
-
     public var bg:Array<FlxSprite> = [];
     public var texts:Array<FlxText> = [];
     public var tabLists:Array<TabList> = [];
+
+    public var onClick:(Int, Int) -> Void = function (a:Int, b:Int) { trace(a + ' ' + b); };
     
-    public function new(tabs:Array<String>, tabListOptions:Array<Array<String>>) {
+    public function new(editor:funkin.editors.ui.EditorState, tabs:Array<String>, tabListOptions:Array<Array<String>>) {
         editor.hudGroup.add(new FlxSprite(0, 0).makeGraphic(FlxG.width, 20, 0xffBD99FF));
 
         var widthSum:Float = 0;
@@ -54,7 +53,7 @@ class Tabs {
             editor.hudGroup.add(tab);
             editor.hudGroup.add(text);
             
-            var tabList:TabList = new TabList(widthSum, 20, tabListOptions[i]);
+            var tabList:TabList = new TabList(editor, this, widthSum, 20, tabListOptions[i]);
             tabLists.push(tabList);
 
             widthSum += text.width + 4;
@@ -69,7 +68,7 @@ class Tabs {
 
             var hovering:Bool = FlxG.mouse.x > widthSum && FlxG.mouse.x < widthSum + bg[i].width && FlxG.mouse.y < 20;
 
-            if (FlxG.mouse.justPressed) {
+            if (FlxG.mouse.justReleased) {
                 if (hovering) tabLists[i].visible = !tabLists[i].visible;
                 else tabLists[i].visible = false;
             }
@@ -80,13 +79,11 @@ class Tabs {
 }
 
 class TabList {
-    public var editor:funkin.editors.ui.EditorState = cast funkin.CoolUtil.editor;
-
     public var x:Float;
     public var y:Float;
 
     public var size:Int;
-    public var onClick:Int -> Void = function (a:Int) { trace(a); };
+    public var parent:Tabs;
 
     public var bg:FlxSprite;
     public var indicator:FlxSprite;
@@ -95,9 +92,11 @@ class TabList {
 
     public var visible:Bool = false;
 
-    public function new(X:Float, Y:Float, options:Array<String>) {
+    public function new(editor:funkin.editors.ui.EditorState, parent:Tabs, X:Float, Y:Float, options:Array<String>) {
         x = X;
         y = Y;
+
+        this.parent = parent;
 
         size = options.length;
 
@@ -109,10 +108,10 @@ class TabList {
         var listWidth:Float = 0;
 
         for (i in 0...options.length) {
-            var text = new FlxText(X + 2, Y + (textHeight + 2) * i + 2, 400, options[i], 12);
+            var text = new FlxText(X + 2, Y + (textHeight + 2) * i + 2, 400, options[i], 18);
             text.wordWrap = false;
             text.autoSize = true;
-            text.setFormat(Paths.font("vcr.ttf"), 12, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+            text.setFormat(Paths.font("vcr.ttf"), 18, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
             texts.push(text);
 
             if (listWidth < text.width) listWidth = text.width;
@@ -128,11 +127,13 @@ class TabList {
     public function update(elapsed:Float) {
         for (i in texts) i.visible = visible;
 
+        var hovering:Bool = FlxG.mouse.x > x && FlxG.mouse.x < x + bg.width && FlxG.mouse.y > y && FlxG.mouse.y < y + bg.height;
+
         bg.visible = visible;
-        indicator.visible = visible && FlxG.mouse.x > x && FlxG.mouse.x < x + bg.width && FlxG.mouse.y > y && FlxG.mouse.y < y + bg.height;
+        indicator.visible = visible && hovering;
 
         indicator.y = y + Math.floor((FlxG.mouse.y - y) / (textHeight + 2)) * (textHeight + 2);
 
-        if (FlxG.mouse.justPressed && visible) onClick(Math.floor((FlxG.mouse.y - y) / (textHeight + 2)));
+        if (FlxG.mouse.justReleased && visible && hovering) parent.onClick(parent.tabLists.indexOf(this), Math.floor((FlxG.mouse.y - y) / (textHeight + 2)));
     }
 }
