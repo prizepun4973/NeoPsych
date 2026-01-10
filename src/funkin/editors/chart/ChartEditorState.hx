@@ -32,10 +32,11 @@ import Conductor.BPMChangeEvent;
 
 import funkin.editors.chart.element.*;
 import funkin.editors.chart.action.*;
+import funkin.editors.ui.widget.*;
 
 using StringTools;
 
-class ChartEditorState extends InjectedState {
+class ChartEditorState extends funkin.editors.ui.EditorState {
     public static var GRID_SIZE:Int = 40;
     public static var Y_OFFSET:Int = 360;
     public static var INSTANCE:ChartEditorState;
@@ -271,6 +272,8 @@ class ChartEditorState extends InjectedState {
     override function create() {
         super.create();
 
+        funkin.CoolUtil.editor = this;
+
         FlxG.mouse.visible = true;
         Conductor.songPosition = lastPos;
 
@@ -366,6 +369,8 @@ class ChartEditorState extends InjectedState {
             }
         }
 
+        add(hudGroup);
+
         for (event in _song.events) {
             var guiEventNote:GuiEventNote = new GuiEventNote(true, event[0], event[1]);
             renderNotes.add(guiEventNote);
@@ -378,32 +383,33 @@ class ChartEditorState extends InjectedState {
 
         var wip:FlxText = new FlxText(2, FlxG.height - 28, 400, "chart editor is wip, plz press debugkey1", 12);
         wip.setFormat(Paths.font("vcr.ttf"), 16, FlxColor.WHITE, FlxTextAlign.LEFT);
-        add(wip);
+        hudGroup.add(wip);
 
         sectionStartLine = new FlxSprite(0, Y_OFFSET).makeGraphic(GRID_SIZE * 13, 4, FlxColor.WHITE);
         sectionStartLine.screenCenter(X);
         sectionStartLine.x -= GRID_SIZE / 2;
-        add(sectionStartLine);
+        hudGroup.add(sectionStartLine);
 
         sectionStopLine = new FlxSprite(0, Y_OFFSET).makeGraphic(GRID_SIZE * 13, 4, FlxColor.WHITE);
         sectionStopLine.screenCenter(X);
         sectionStopLine.x -= GRID_SIZE / 2;
-        add(sectionStopLine);
+        hudGroup.add(sectionStopLine);
 
         conductorLine = new FlxSprite(0, Y_OFFSET).makeGraphic(GRID_SIZE * 13, 4, 0xffBD99FF);
         conductorLine.screenCenter(X);
         conductorLine.x -= GRID_SIZE / 2;
-        add(conductorLine);
+        hudGroup.add(conductorLine);
 
         crosshair = new Crosshair();
-        add(crosshair);
+        hudGroup.add(crosshair);
 
-        add(new FlxSprite(0, 0).makeGraphic(FlxG.width, 20, 0xffBD99FF));
-        add(new FlxSprite(0, 20).makeGraphic(FlxG.width, 80, 0x64BD99FF));
+        hudGroup.add(new FlxSprite(0, 20).makeGraphic(FlxG.width, 80, 0x64BD99FF));
         
         textPanel = new FlxText(5, 45, 400, "hi", 12);
         textPanel.setFormat(Paths.font("vcr.ttf"), 16, FlxColor.WHITE, FlxTextAlign.LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
-        add(textPanel);
+        hudGroup.add(textPanel);
+
+        tab = new funkin.editors.ui.EditorState.Tabs(['File', 'aaa'], [['ee'], ['1', '2']]);
 
         updateCurSec();
     }
