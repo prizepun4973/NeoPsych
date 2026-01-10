@@ -14,10 +14,14 @@ class GuiEventNote extends GuiElement {
         this.events = events;
         this.relatedAction = relatedAction;
 
-        if (pushData) editor.data.push([
-            'strumTime' => strumTime,
-            'events' => events,
-        ]);
+        if (pushData) {
+            ChartEditorState.data.push([
+                'strumTime' => strumTime,
+                'events' => events,
+            ]);
+
+            this.dataID = ChartEditorState.data.length - 1;
+        }
 
         loadGraphic(Paths.image("eventArrow"));
         setGraphicSize(ChartEditorState.GRID_SIZE, ChartEditorState.GRID_SIZE);

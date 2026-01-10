@@ -10,22 +10,14 @@ import funkin.game.component.Note.EventNote;
 import flixel.FlxG;
 import flixel.FlxSprite;
 
-typedef ElementRemoveData = {
-    var events:Array<EventNote>;
-    var strumTime:Float;
-    var noteData:Int;
-    var susLength:Float;
-    var noteType:String;
-    var relatedAction:EditorAction;
-    var wasSelected:Bool;
-}
-
-class ElementRemoveAction extends ChartEditorState.EditorAction {
-    public var elements:Array<GuiElement> = new Array();
-    public var datas:Array<Int> = new Array();
+class ElementAddAction extends ChartEditorState.EditorAction {
+    public var datas:Array<Int> = [];
+    public var elements:Array<GuiElement> = [];
 
     public function new(elements:Array<GuiElement>) {
         super();
+
+        this.elements = elements;
 
         redo();
     }
@@ -33,8 +25,9 @@ class ElementRemoveAction extends ChartEditorState.EditorAction {
     override function redo() {
         if (datas.length > 0) {
             for (i in datas) {
-                var data = editor.data[i];
-                if (editor.data[i].exists('noteData')) {
+                var data = ChartEditorState.data[i];
+                trace(data);
+                if (ChartEditorState.data[i].exists('noteData')) {
                     var note:GuiNote = new GuiNote(false, data.get('strumTime'), data.get('noteData'), data.get('susLength'));
                     note.noteType = data.get('noteType');
                     note.dataID = i;
@@ -49,19 +42,20 @@ class ElementRemoveAction extends ChartEditorState.EditorAction {
         }
         else {
             for (i in elements) {
-                editor.addElement(i);
                 datas.push(i.dataID);
+                editor.addElement(i);
             }
         }
     }
 
     override function undo() {
+        trace(datas);
+        trace(ChartEditorState.data);
         for (i in datas) {
             editor.renderNotes.forEach(function (spr:FlxSprite) {
                 if (Std.isOfType(spr, GuiElement)) {
                     var element:GuiElement = cast (spr, GuiElement);
-                    if (((Std.isOfType(element, GuiNote) && editor.data[i].exists('noteData')) || (Std.isOfType(element, GuiEventNote) && !editor.data[i].exists('noteData')))
-                        && element.strumTime == editor.data[i].get('strumTime')) editor.renderNotes.remove(element);
+                    if (element.dataID == i) editor.removeElement(element);
                 }
             });
         }

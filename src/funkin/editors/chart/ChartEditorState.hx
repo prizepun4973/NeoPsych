@@ -49,7 +49,7 @@ class ChartEditorState extends InjectedState {
     public static var undos:Array<EditorAction> = [];
     public static var redos:Array<EditorAction> = [];
 
-    public var data:Array<Map<String, Dynamic>> = [];
+    public static var data:Array<Map<String, Dynamic>> = [];
 
     public var beatSnap:Int = 32;
 
@@ -82,6 +82,7 @@ class ChartEditorState extends InjectedState {
         curSec = 0;
         undos = [];
         redos = [];
+        data = [];
     }
     
     public static function getMousePos() {
@@ -129,7 +130,6 @@ class ChartEditorState extends InjectedState {
 
     public function addElement(element:GuiElement, pushData:Bool = false) {
         renderNotes.add(element);
-        element.dataID = data.length - 1;
         if (data[element.dataID].exists('wasSelected')) if (data[element.dataID].get('wasSelected')) selectIndicator.add(new SelectIndicator(element));
     }
 
@@ -501,12 +501,22 @@ class ChartEditorState extends InjectedState {
         if (crosshair.visible) {
             if (FlxG.mouse.pressed && !FlxG.keys.pressed.CONTROL && !FlxG.keys.pressed.SHIFT && crosshair.target == null && paused) {
                 if (FlxG.mouse.x > gridBG.x + GRID_SIZE) {
-                    addAction(new EditorAddAction(
-                        crosshair.chained? crosshair.chainedMousePos : getMousePos(), 
-                        Math.floor((FlxG.mouse.x - gridBG.x - GRID_SIZE) / GRID_SIZE))
-                    );
+                    addAction(new ElementAddAction([
+                        new GuiNote(
+                            true, 
+                            crosshair.chained? crosshair.chainedMousePos : getMousePos(), 
+                            Math.floor((FlxG.mouse.x - gridBG.x - GRID_SIZE) / GRID_SIZE),
+                            0, 
+                            null
+                    )]));
                 }
-                else addAction(new EditorAddAction(crosshair.chained? crosshair.chainedMousePos : getMousePos()));
+                else addAction(new ElementAddAction([new GuiEventNote(
+                        true, 
+                        crosshair.chained? crosshair.chainedMousePos : getMousePos(), 
+                        [], 
+                        null)])
+                    );
+                    
             }
 
             if (FlxG.mouse.pressedRight && !FlxG.keys.pressed.CONTROL && crosshair.target != null && !FlxG.keys.pressed.SHIFT && paused) {
