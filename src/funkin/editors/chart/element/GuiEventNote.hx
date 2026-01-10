@@ -2,17 +2,15 @@ package funkin.editors.chart.element;
 
 import funkin.editors.chart.ChartEditorState;
 import funkin.editors.chart.ChartEditorState.GuiElement;
-import funkin.editors.chart.action.EventAddAction;
 import funkin.game.component.Note.EventNote;
 
 class GuiEventNote extends GuiElement {
     public var events:Array<EventNote>;
 
-    public function new(pushData:Bool, strumTime:Float, events:Array<EventNote>, ?relatedAction = null) {
+    public function new(pushData:Bool, strumTime:Float, events:Array<EventNote>) {
         super(strumTime);
 
         this.events = events;
-        this.relatedAction = relatedAction;
 
         if (pushData) {
             ChartEditorState.data.push([

@@ -361,13 +361,13 @@ class ChartEditorState extends InjectedState {
 
         for (section in _song.notes) {
             for (note in section.sectionNotes) {
-                var guiNote:GuiNote = new GuiNote(true, note[0], Std.int(section.mustHitSection ? (note[1] < 4 ? note[1] + 4 : note[1] - 4) : note[1]), note[2], null);
+                var guiNote:GuiNote = new GuiNote(true, note[0], Std.int(section.mustHitSection ? (note[1] < 4 ? note[1] + 4 : note[1] - 4) : note[1]), note[2]);
                 if (note.length > 3) if (Std.isOfType(note[3], String)) guiNote.noteType = note[3];
             }
         }
 
         for (event in _song.events) {
-            var guiEventNote:GuiEventNote = new GuiEventNote(true, event[0], event[1], null);
+            var guiEventNote:GuiEventNote = new GuiEventNote(true, event[0], event[1]);
             renderNotes.add(guiEventNote);
         }
 
@@ -508,15 +508,13 @@ class ChartEditorState extends InjectedState {
                             true, 
                             crosshair.chained? crosshair.chainedMousePos : getMousePos(), 
                             Math.floor((FlxG.mouse.x - gridBG.x - GRID_SIZE) / GRID_SIZE),
-                            0, 
-                            null
+                            0
                     )]));
                 }
                 else addAction(new ElementAddAction([new GuiEventNote(
                         true, 
                         crosshair.chained? crosshair.chainedMousePos : getMousePos(), 
-                        [], 
-                        null)])
+                        [])])
                     );
                     
             }
@@ -602,8 +600,6 @@ class GuiElement extends FlxSprite {
     public var strumTime:Float = 0;
     public var dataID:Int;
     public var editor:ChartEditorState = ChartEditorState.INSTANCE;
-    public var relatedAction:EditorAction;
-    public var relatedRemove:EditorAction;
 
     public function new(strumTime:Float) {
         super(0, 0);

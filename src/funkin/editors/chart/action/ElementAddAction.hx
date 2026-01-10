@@ -4,7 +4,6 @@ import funkin.editors.chart.ChartEditorState;
 import funkin.editors.chart.ChartEditorState.GuiElement;
 import funkin.editors.chart.ChartEditorState.EditorAction;
 import funkin.editors.chart.ChartEditorState.SelectIndicator;
-import funkin.editors.chart.action.NoteAddAction;
 import funkin.editors.chart.element.*;
 import funkin.game.component.Note.EventNote;
 import flixel.FlxG;
@@ -33,7 +32,7 @@ class ElementAddAction extends ChartEditorState.EditorAction {
                     note.dataID = i;
                     editor.addElement(note);
                 } else {
-                    var event:GuiEventNote = new GuiEventNote(false, data.get('strumTime'), null);
+                    var event:GuiEventNote = new GuiEventNote(false, data.get('strumTime'), []);
                     event.events = data.get('events');
                     event.dataID = i;
                     editor.addElement(event);
