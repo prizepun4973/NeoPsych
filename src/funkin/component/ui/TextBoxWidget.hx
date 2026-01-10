@@ -3,29 +3,41 @@ package funkin.component.ui;
 import flixel.FlxG;
 import flixel.text.FlxText;
 import flixel.util.FlxColor;
+import flixel.FlxSprite;
 
-class TextBoxWidget extends flixel.FlxSprite {
+class TextBoxWidget extends FlxSprite {
     var onChange:Void -> Void;
-    var text:FlxText;
+    var displayText:FlxText;
+    var indicator:FlxSprite;
 
-    public override function new(parent:flixel.group.FlxGroup.FlxTypedGroup<flixel.FlxBasic>, X:Float, Y:Float\, buttonText:String, onClick:Void -> Void) {
+    var editing:Bool = false;
+
+    public override function new(parent:flixel.group.FlxGroup.FlxTypedGroup<flixel.FlxBasic>, X:Float, Y:Float, width:Int, buttonText:String, onChange:Void -> Void) {
         super(X, Y);
         
-        text = new FlxText(X + 2, Y + 2, 400, buttonText, 18);
-        text.wordWrap = false;
-        text.autoSize = true;
-        text.setFormat(Paths.font("vcr.ttf"), 18, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+        displayText = new FlxText(X + 2, Y + 2, width, buttonText, 18);
+        displayText.wordWrap = false;
+        displayText.autoSize = true;
+        displayText.setFormat(Paths.font("vcr.ttf"), 18, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 
-        makeGraphic(Std.int(text.width) + 4, Std.int(text.height) + 4);
+        makeGraphic(width + 4, Std.int(displayText.height) + 4);
 
         parent.add(this);
-        parent.add(text);
-        this.onClick = onClick;
+        parent.add(displayText);
+        this.onChange = onChange;
     }
 
     override function update(elapsed:Float) {
         super.update(elapsed);
-        if (FlxG.mouse.x > x && FlxG.mouse.x < x + width && FlxG.mouse.y > y && FlxG.mouse.y < y + height && FlxG.mouse.justReleased)
-            onClick();
+        var hovering:Bool = FlxG.mouse.x < x + width && FlxG.mouse.y > y && FlxG.mouse.y < y + height && FlxG.mouse.justReleased;
+
+        if (FlxG.mouse.justReleased) {
+            if (!hovering && editing) onChange();
+            editing = hovering;
+        }
+
+        if (editing) {
+            
+        }
     }
 }

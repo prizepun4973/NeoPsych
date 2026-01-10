@@ -417,7 +417,8 @@ class ChartEditorState extends funkin.editors.ui.EditorState {
 
         tab.onClick = function (column:Int, line:Int) {
             var test:EditorSubState = new EditorSubState('idk');
-            test.addButton(40, 40, 'aaa', function() {trace('hi');});
+            test.addButton(40, 40, 'aaa', function() {});
+            test.addTextBox(40, 80, 50, 'aaa', function() {trace('hi');});
             openSubState(test);
         };
 

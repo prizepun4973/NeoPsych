@@ -12,4 +12,8 @@ class EditorSubState extends funkin.jit.InjectedSubState {
     public function addButton(X:Float, Y:Float, text:String, onClick:Void -> Void) {
         new ButtonWidget(this, X, Y, text, onClick);
     }
+
+    public function addTextBox(X:Float, Y:Float, width:Int, buttonText:String, onChange:Void -> Void) {
+        new TextBoxWidget(this, X, Y, width, buttonText, onChange);
+    }
 }
