@@ -1,5 +1,6 @@
 package funkin.component.ui;
 
+import flixel.FlxState;
 import flixel.FlxG;
 import flixel.text.FlxText;
 import flixel.util.FlxColor;
@@ -11,8 +12,6 @@ import flixel.input.keyboard.FlxKey;
 class TextBoxWidget extends FlxSprite {
     var onChange:TextBoxWidget -> Void;
     var displayText:FlxText;
-
-    var pos:Int = 0;
 
     public var editing:Bool = false;
 
@@ -35,13 +34,15 @@ class TextBoxWidget extends FlxSprite {
 
     override function update(elapsed:Float) {
         super.update(elapsed);
-        var hovering:Bool = FlxG.mouse.x < x + width && FlxG.mouse.y > y && FlxG.mouse.y < y + height && FlxG.mouse.justReleased;
 
         if (FlxG.mouse.justReleased) {
-            if (!hovering && editing) onChange(this);
-            if (hovering && !editing) pos = displayText.text.length - 1;
-            editing = hovering;
+            if (!isHovering() && editing) onChange(this);
+            editing = isHovering();
         }
+    }
+
+    public function isHovering() {
+        return FlxG.mouse.x < x + width && FlxG.mouse.y > y && FlxG.mouse.y < y + height && FlxG.mouse.justReleased;
     }
 
     public function onKeyDown(key:KeyCode, modifier:KeyModifier) {
@@ -59,6 +60,7 @@ class TextBoxWidget extends FlxSprite {
                     var result:String = '';
                     for (i in 0...(displayText.text.length - 1)) result += displayText.text.charAt(i);
                     displayText.text = result;
+                    if (FlxG.keys.pressed.CONTROL) displayText.text = '';
                 
                 default:
                     displayText.text += getKeyName(FlxG.keys.firstJustPressed());

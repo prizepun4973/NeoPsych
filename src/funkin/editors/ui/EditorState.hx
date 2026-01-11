@@ -108,10 +108,10 @@ class TabList {
         var listWidth:Float = 0;
 
         for (i in 0...options.length) {
-            var text = new FlxText(X + 2, Y + (textHeight + 2) * i + 2, 400, options[i], 18);
+            var text = new FlxText(X + 2, Y + (textHeight + 2) * i + 2, 400, options[i], 12);
             text.wordWrap = false;
             text.autoSize = true;
-            text.setFormat(Paths.font("vcr.ttf"), 18, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+            text.setFormat(Paths.font("vcr.ttf"), 12, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
             texts.push(text);
 
             if (listWidth < text.width) listWidth = text.width;

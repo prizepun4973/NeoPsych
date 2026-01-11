@@ -19,6 +19,12 @@ class EditorSubState extends funkin.jit.InjectedSubState {
         add(new ButtonWidget(this, X, Y, text, onClick));
     }
 
+    public function addTextList(X:Float, Y:Float, width:Int, buttonText:String, suggestions:Array<String>, onChange:TextBoxWidget -> Void) {
+        var textBox:TextBoxWidget = new TextListWidget(this, X, Y, width, buttonText, suggestions, onChange);
+        textBoxs.push(textBox);
+        add(textBox);
+    }
+
     public function addTextBox(X:Float, Y:Float, width:Int, buttonText:String, onChange:TextBoxWidget -> Void) {
         var textBox:TextBoxWidget = new TextBoxWidget(this, X, Y, width, buttonText, onChange);
         textBoxs.push(textBox);
