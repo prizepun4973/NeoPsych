@@ -2855,6 +2855,7 @@ class PlayState extends MusicBeatState {
 				note.kill();
 				notes.remove(note, true);
 				note.destroy();
+				note = null;
 			}
 			return;
 		}
@@ -2962,7 +2963,10 @@ class PlayState extends MusicBeatState {
 				if(showComboNum) insert(members.indexOf(strumLineNotes), numScore);
 
 				FlxTween.tween(numScore, {alpha: 0}, 0.2 / playbackRate, {
-					onComplete: function(tween:FlxTween) { numScore.destroy(); },
+					onComplete: function(tween:FlxTween) { 
+						numScore.destroy(); 
+						numScore = null;
+					},
 					startDelay: Conductor.crochet * 0.001 / playbackRate
 				});
 
@@ -2981,6 +2985,9 @@ class PlayState extends MusicBeatState {
 				onComplete: function(tween:FlxTween) {
 					coolText.destroy();
 					rating.destroy();
+					
+					coolText = null;
+					rating = null;
 				},
 				startDelay: Conductor.crochet * 0.001 / playbackRate
 			});
