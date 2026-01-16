@@ -419,7 +419,8 @@ class ChartEditorState extends funkin.editors.ui.EditorState {
             var test:EditorSubState = new EditorSubState('idk');
             test.addButton(40, 40, 'aaa', function() {});
             test.addCheckBox(40, 120, 'aaa', false, function (activated:Bool) {});
-            test.addTextList(40, 80, 50, 'aaa', ['hi'], function(textBox:funkin.component.ui.TextBoxWidget) {trace('hi');});
+            test.addTextList(40, 80, 50, 'aaa', ['hi', 'hi', 'hi', 'hi', 'hi', 'hi', 'hi', 'hi', 'hi', 'hi', 'hi', 'hi', 'hi', 'hi', 'hi', 'hi', 'hi', 'hi', 'hi', 'hi', 'hi'], function(textBox:funkin.component.ui.TextBoxWidget) {trace('hi');});
+            test.addTextBox(40, 180, 50, 'aaa', function(textBox:funkin.component.ui.TextBoxWidget) {trace('hi');});
             openSubState(test);
         };
 

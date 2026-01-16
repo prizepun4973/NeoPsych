@@ -4,6 +4,8 @@ import flixel.FlxG;
 import flixel.text.FlxText;
 import flixel.util.FlxColor;
 import flixel.FlxSprite;
+import flixel.group.FlxGroup.FlxTypedGroup;
+import flixel.FlxBasic;
 
 import lime.ui.*;
 import flixel.input.keyboard.FlxKey;
@@ -15,13 +17,13 @@ class TextListWidget extends TextBoxWidget {
     var bg:FlxSprite;
     var texts:Array<FlxText> = [];
 
-    public override function new(parent:flixel.group.FlxGroup.FlxTypedGroup<flixel.FlxBasic>, X:Float, Y:Float, width:Int, buttonText:String, suggestions:Array<String>, onChange:TextBoxWidget -> Void) {
+    public override function new(parent:FlxTypedGroup<FlxBasic>, suggestGroup:FlxTypedGroup<FlxBasic>, X:Float, Y:Float, width:Int, buttonText:String, suggestions:Array<String>, onChange:TextBoxWidget -> Void) {
         super(parent, X, Y, width, buttonText, onChange);
         textHeight = displayText.height;
         this.suggestions = suggestions;
 
         bg = new FlxSprite(X, Y + height).makeGraphic(Std.int(this.width), Std.int(textHeight + 2) * suggestions.length);
-        parent.add(bg);
+        suggestGroup.add(bg);
 
         for (i in 0...suggestions.length) {
             var text = new FlxText(X + 2, Y + height + (textHeight + 2) * i + 2, 400, suggestions[i], 18);
@@ -32,7 +34,7 @@ class TextListWidget extends TextBoxWidget {
             text.visible = false;
             text.alpha = 0.5;
 
-            parent.add(text);
+            suggestGroup.add(text);
         }
 
         updateSuggestion();

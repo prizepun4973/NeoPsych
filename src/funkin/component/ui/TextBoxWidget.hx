@@ -42,7 +42,7 @@ class TextBoxWidget extends FlxSprite {
     }
 
     public function isHovering() {
-        return FlxG.mouse.x < x + width && FlxG.mouse.y > y && FlxG.mouse.y < y + height && FlxG.mouse.justReleased;
+        return CoolUtil.mouseInRange(x, x + width, y, y + height);
     }
 
     public function onKeyDown(key:KeyCode, modifier:KeyModifier) {

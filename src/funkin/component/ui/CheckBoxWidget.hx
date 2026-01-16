@@ -23,6 +23,8 @@ class CheckBoxWidget extends flixel.FlxSprite {
         makeGraphic(Std.int(text.height), Std.int(text.height));
 
         x += text.width + 6;
+        
+        color = activated ? 0xFFFFFFFF : 0xFFFFFF00;
 
         parent.add(this);
         parent.add(text);
@@ -30,12 +32,12 @@ class CheckBoxWidget extends flixel.FlxSprite {
     }
 
     override function update(elapsed:Float) {
-        if (CoolUtil.mouseInRange(x, x + width, y, y + height) && FlxG.mouse.justPressed) {
+        super.update(elapsed);
+
+        if (CoolUtil.mouseInRange(x, x + width, y, y + height) && FlxG.mouse.justReleased) {
             activated = !activated;
             onClick(activated);
             color = activated ? 0xFFFFFFFF : 0xFFFFFF00;
         }
-        
-        super.update(elapsed);
     }
 }

@@ -25,7 +25,7 @@ class ButtonWidget extends flixel.FlxSprite {
 
     override function update(elapsed:Float) {
         super.update(elapsed);
-        if (FlxG.mouse.x > x && FlxG.mouse.x < x + width && FlxG.mouse.y > y && FlxG.mouse.y < y + height && FlxG.mouse.justReleased)
+        if (CoolUtil.mouseInRange(x, x + width, y, y + height) && FlxG.mouse.justReleased)
             onClick();
     }
 }

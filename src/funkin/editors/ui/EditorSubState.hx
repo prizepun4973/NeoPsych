@@ -1,9 +1,11 @@
 package funkin.editors.ui;
 
+import flixel.FlxBasic;
 import flixel.group.FlxGroup.FlxTypedGroup;
 import funkin.jit.InjectedSubState;
 import flixel.util.FlxColor;
 import flixel.text.FlxText;
+import flixel.FlxSprite;
 import funkin.component.ui.*;
 
 import lime.ui.*;
@@ -11,14 +13,17 @@ import lime.ui.*;
 class EditorSubState extends funkin.jit.InjectedSubState {
     var textBoxs:Array<TextBoxWidget> = [];
 
+    var defaultGroup:FlxTypedGroup<FlxBasic> = new FlxTypedGroup<FlxBasic>();
+
     override public function new(script:String) {
         super(script);
         flixel.FlxG.stage.window.onKeyDown.add(onKeyDown);
+        add(defaultGroup);
     }
 
     public function addButton(X:Float, Y:Float, text:String, onClick:Void -> Void) {
         var button:ButtonWidget = new ButtonWidget(this, X, Y, text, onClick);
-        add(button);
+        defaultGroup.add(button);
         return button;
     }
 
@@ -27,27 +32,27 @@ class EditorSubState extends funkin.jit.InjectedSubState {
         text.wordWrap = false;
         text.autoSize = true;
         text.setFormat(Paths.font("vcr.ttf"), 18, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
-        add(text);
+        defaultGroup.add(text);
         return text;
     }
 
     public function addTextList(X:Float, Y:Float, width:Int, buttonText:String, suggestions:Array<String>, onChange:TextBoxWidget -> Void) {
-        var textBox:TextBoxWidget = new TextListWidget(this, X, Y, width, buttonText, suggestions, onChange);
+        var textBox:TextBoxWidget = new TextListWidget(defaultGroup, this, X, Y, width, buttonText, suggestions, onChange);
         textBoxs.push(textBox);
-        add(textBox);
+        defaultGroup.add(textBox);
         return textBox;
     }
 
     public function addTextBox(X:Float, Y:Float, width:Int, buttonText:String, onChange:TextBoxWidget -> Void) {
-        var textBox:TextBoxWidget = new TextBoxWidget(this, X, Y, width, buttonText, onChange);
+        var textBox:TextBoxWidget = new TextBoxWidget(defaultGroup, X, Y, width, buttonText, onChange);
         textBoxs.push(textBox);
-        add(textBox);
+        defaultGroup.add(textBox);
         return textBox;
     }
 
     public function addCheckBox(X:Float, Y:Float, text:String, activated:Bool, onClick:Bool -> Void) {
-        var checkBox:CheckBoxWidget = new CheckBoxWidget(this, X, Y, text, activated, onClick);
-        add(checkBox);
+        var checkBox:CheckBoxWidget = new CheckBoxWidget(defaultGroup, X, Y, text, activated, onClick);
+        defaultGroup.add(checkBox);
         return checkBox;
     }
 

@@ -125,8 +125,8 @@
 
 	<!--Place custom nodes like icons here (higher priority to override the HaxeFlixel icon)-->
 	<assets path='assets/images/iconOG.png' rename='icon.png' if="linux || mac" />
-	
 	<icon path="assets/images/icon16.png" size='16'/>
+	<icon path="assets/images/icon32.png" size='32'/>
 	<icon path="assets/images/icon64.png" size='64'/>
 
 </project>
