@@ -16,7 +16,7 @@ class EditorState extends funkin.jit.InjectedState{
 
     override function create() {
         super.create();
-        Main.fpsVar.y = 25;
+        Main.fpsVar.visible = false;
     }
 
     override function update(elapsed:Float) {
@@ -26,7 +26,7 @@ class EditorState extends funkin.jit.InjectedState{
 
     override function destroy() {
         super.destroy();
-        Main.fpsVar.y = 3;
+        Main.fpsVar.visible = true;
     }
 }
 
@@ -38,7 +38,7 @@ class Tabs {
     public var onClick:(Int, Int) -> Void = function (a:Int, b:Int) { trace(a + ' ' + b); };
     
     public function new(editor:funkin.editors.ui.EditorState, tabs:Array<String>, tabListOptions:Array<Array<String>>) {
-        editor.hudGroup.add(new FlxSprite(0, 0).makeGraphic(FlxG.width, 20, 0xffBD99FF));
+        editor.hudGroup.add(new FlxSprite(0, 0).makeGraphic(FlxG.width, 20, 0xC8d3d3d3));
 
         var widthSum:Float = 0;
         for (i in 0...tabs.length) {
@@ -47,7 +47,7 @@ class Tabs {
             text.autoSize = true;
             text.setFormat(Paths.font("vcr.ttf"), 12, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
             texts.push(text);
-            var tab = new FlxSprite(widthSum, 0).makeGraphic(Std.int(4 + text.width), 20, FlxColor.BLACK);
+            var tab = new FlxSprite(widthSum, 0).makeGraphic(Std.int(4 + text.width), 20, 0xFFd3d3d3);
             bg.push(tab);
 
             editor.hudGroup.add(tab);
@@ -56,7 +56,7 @@ class Tabs {
             var tabList:TabList = new TabList(editor, this, widthSum, 20, tabListOptions[i]);
             tabLists.push(tabList);
 
-            widthSum += text.width + 4;
+            widthSum += text.width + 5;
         }
     }
 
@@ -121,7 +121,7 @@ class TabList {
         }
         
         bg.makeGraphic(Math.ceil(listWidth + 4), Math.ceil(options.length * (textHeight + 2)));
-        indicator.makeGraphic(Math.ceil(listWidth + 4), Math.ceil(textHeight + 2), 0xFF000000);
+        indicator.makeGraphic(Math.ceil(listWidth + 4), Math.ceil(textHeight + 2), 0xFF00AFFF);
     }
 
     public function update(elapsed:Float) {

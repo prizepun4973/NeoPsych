@@ -3097,6 +3097,9 @@ class PlayState extends MusicBeatState {
 
 		ClientPrefs.resetPlayStateStuff();
 
+		Paths.clearStoredMemory();
+		Paths.clearUnusedMemory();
+
 		super.destroy();
 	}
 

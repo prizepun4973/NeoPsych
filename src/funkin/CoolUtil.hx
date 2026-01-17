@@ -19,6 +19,8 @@ import sys.FileSystem;
 import openfl.utils.Assets;
 #end
 
+import flixel.util.FlxSort;
+
 import funkin.options.menu.*;
 import funkin.menu.*;
 import funkin.jit.*;
@@ -174,6 +176,10 @@ class CoolUtil
 
 	public static function mouseInRange(x1:Float, x2:Float, y1:Float, y2:Float) {
 		return FlxG.mouse.x > x1 && FlxG.mouse.x < x2 && FlxG.mouse.y > y1 && FlxG.mouse.y < y2;
+	}
+
+	public static function sortByTime(Obj1:Array<Dynamic>, Obj2:Array<Dynamic>):Int {
+		return FlxSort.byValues(FlxSort.ASCENDING, Obj1[0], Obj2[0]);
 	}
 
 	public static function getStateByString(state:String):FlxState {
