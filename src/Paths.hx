@@ -135,40 +135,21 @@ class Paths {
 		return returnPath;
 	}
 
-	inline public static function getPreloadPath(file:String = '') {
-		return 'assets/$file';
-	}
+	inline public static function getPreloadPath(file:String = '') return 'assets/$file';
 
-	inline static public function file(file:String, type:AssetType = TEXT, ?library:String) {
-		return getPath(file, type, library);
-	}
+	inline static public function file(file:String, type:AssetType = TEXT, ?library:String) return getPath(file, type, library);
+	inline static public function txt(key:String, ?library:String) return getPath('data/$key.txt', TEXT, library);
+	inline static public function xml(key:String, ?library:String) return getPath('data/$key.xml', TEXT, library);
+	inline static public function json(key:String, ?library:String) return getPath('data/$key.json', TEXT, library);
+	inline static public function shaderFragment(key:String, ?library:String) return getPath('shaders/$key.frag', TEXT, library);
+	inline static public function shaderVertex(key:String, ?library:String) return getPath('shaders/$key.vert', TEXT, library);
+	inline static public function ndll(key:String, ?library:String) return getPath('ndlls/$key', TEXT, library);
+	inline static public function lua(key:String, ?library:String) return getPath('$key.lua', TEXT, library);
+	inline static public function hscript(key:String, ?library:String) return getPath('$key.hx', TEXT, library);
 
-	inline static public function txt(key:String, ?library:String) {
-		return getPath('data/$key.txt', TEXT, library);
-	}
-
-	inline static public function xml(key:String, ?library:String) {
-		return getPath('data/$key.xml', TEXT, library);
-	}
-
-	inline static public function json(key:String, ?library:String) {
-		return getPath('data/$key.json', TEXT, library);
-	}
-
-	inline static public function shaderFragment(key:String, ?library:String) {
-		return getPath('shaders/$key.frag', TEXT, library);
-	}
-	inline static public function shaderVertex(key:String, ?library:String) {
-		return getPath('shaders/$key.vert', TEXT, library);
-	}
-	static public function ndll(key:String, ?library:String) {
-		return getPath('ndlls/$key', TEXT, library);
-	}
-	static public function lua(key:String, ?library:String) {
-		return getPath('$key.lua', TEXT, library);
-	}
-	static public function hscript(key:String, ?library:String) {
-		return getPath('$key.hx', TEXT, library);
+	static public function component(key:String, ?library:String) {
+		if (library != null) return 'manifest/$library/$key.xml';
+		return 'manifest/$key.xml';
 	}
 
 	static public function video(key:String) {
