@@ -664,7 +664,7 @@ class ChartEditorState extends funkin.editors.ui.EditorState {
         textPanel.setFormat(Paths.font("vcr.ttf"), 16, FlxColor.WHITE, FlxTextAlign.LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
         hudGroup.add(textPanel);
 
-        add(haxe.ui.ComponentBuilder.fromFile('assets/ui/chart-editor/main-view.xml'));
+        add(haxe.ui.ComponentBuilder.fromFile('art/ui/chart-editor/main-view.xml'));
 
         updateCurSec();
 
