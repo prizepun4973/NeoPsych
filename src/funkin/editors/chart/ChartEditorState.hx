@@ -389,7 +389,7 @@ class ChartEditorState extends funkin.editors.ui.EditorState {
 
         textPanel.text = 
             FlxStringUtil.formatTime(Conductor.songPosition / 1000, true) + " / " + FlxStringUtil.formatTime(FlxG.sound.music.length / 1000, true) +
-            "                          Section: " + curSec + " (Beats: " + _song.notes[curSec].sectionBeats + ", BPM: " + sectionBPM[curSec] + ")" + 
+            "                       Section: " + curSec + " (Beats: " + _song.notes[curSec].sectionBeats + ", BPM: " + sectionBPM[curSec] + ")" + 
 		    " Beat: " + curBeat + " | Step: " + curStep + 
             " (" + Std.string(FlxMath.roundDecimal(Conductor.songPosition / 1000, 2)) + ")";
     }
@@ -571,7 +571,7 @@ class ChartEditorState extends funkin.editors.ui.EditorState {
         hudGroup.add(new FlxSprite(0, FlxG.height - bottomHeight).makeGraphic(FlxG.width, bottomHeight, 0xFF3D3F41));
         
         textPanel = new FlxText(2, FlxG.height - bottomHeight + 1, 0, "hi", 12);
-        textPanel.setFormat(Paths.font("vcr.ttf"), 16, FlxColor.WHITE, FlxTextAlign.LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+        textPanel.setFormat(Paths.font("vcr.ttf", false), 16, FlxColor.WHITE, FlxTextAlign.LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
         textPanel.wordWrap = false;
         textPanel.autoSize = true;
         hudGroup.add(textPanel);

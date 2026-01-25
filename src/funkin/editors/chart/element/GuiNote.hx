@@ -31,8 +31,8 @@ class GuiNote extends GuiElement{
             this.dataID = ChartEditorState.data.length - 1;
         }
 
-        loadGraphic(Paths.image("NOTE_assets"));
-        frames = Paths.getSparrowAtlas("NOTE_assets");
+        loadGraphic(Paths.image("NOTE_assets", 'preload'));
+        frames = Paths.getSparrowAtlas("NOTE_assets", 'preload');
         setGraphicSize(ChartEditorState.GRID_SIZE, ChartEditorState.GRID_SIZE);
         centerOffsets();
         centerOrigin();

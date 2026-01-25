@@ -195,18 +195,15 @@ class Paths {
 	}
 
 	public static var currentTrackedAssets:Map<String, FlxGraphic> = [];
-	static public function image(key:String, ?library:String = null, ?allowGPU:Bool = true):FlxGraphic
-	{
+	static public function image(key:String, ?library:String = null, ?allowGPU:Bool = true):FlxGraphic {
 		var bitmap:BitmapData = null;
 		var file:String = null;
 
 		file = modsImages(key);
-		if (currentTrackedAssets.exists(file))
-		{
+		if (currentTrackedAssets.exists(file)) {
 			localTrackedAssets.push(file);
 			return currentTrackedAssets.get(file);
-		}
-		else if (FileSystem.exists(file)) bitmap = BitmapData.fromFile(file);
+		} else if (FileSystem.exists(file)) bitmap = BitmapData.fromFile(file);
 		else {
 			file = getPath('images/$key.png', IMAGE, library);
 			if (currentTrackedAssets.exists(file)) {
@@ -278,9 +275,9 @@ class Paths {
 		return Assets.getText(getPath(key, TEXT));
 	}
 
-	inline static public function font(key:String) {
+	inline static public function font(key:String, ?mods:Bool = true) {
 		var file:String = modsFont(key);
-		if(FileSystem.exists(file)) return file;
+		if(FileSystem.exists(file) && mods) return file;
 		
 		return 'assets/fonts/$key';
 	}
