@@ -36,7 +36,7 @@ import sys.io.File;
 #end
 
 import funkin.menu.TitleState;
-import funkin.editors.widget.*;
+import funkin.ui.widget.*;
 
 using StringTools;
 

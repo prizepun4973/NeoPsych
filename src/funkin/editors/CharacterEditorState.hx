@@ -37,7 +37,7 @@ import flixel.animation.FlxAnimation;
 
 import funkin.menu.TitleState;
 
-import funkin.editors.widget.*;
+import funkin.ui.widget.*;
 
 import sys.FileSystem;
 

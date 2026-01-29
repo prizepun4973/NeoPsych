@@ -21,8 +21,6 @@ import sys.FileSystem;
 import sys.io.File;
 import sys.io.Process;
 
-import haxe.ui.Toolkit;
-
 import funkin.component.*;
 
 using StringTools;
@@ -58,13 +56,7 @@ class Main extends Sprite {
 		var stageWidth:Int = Lib.current.stage.stageWidth;
 		var stageHeight:Int = Lib.current.stage.stageHeight;
 
-		Toolkit.init();
-    	Toolkit.theme = 'dark';
-		Toolkit.autoScale = false;
-		// Don't focus on UI elements when they first appear.
-		haxe.ui.focus.FocusManager.instance.autoFocus = false;
-		funkin.component.ui.Cursor.registerHaxeUICursors();
-		haxe.ui.tooltips.ToolTipManager.defaultDelay = 200;
+		haxe.ui.Toolkit.init();
 
 		#if hxdiscord_rpc DiscordClient.prepare(); #end
 

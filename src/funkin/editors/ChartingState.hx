@@ -59,7 +59,7 @@ import funkin.game.component.*;
 import funkin.game.data.Song.SwagSong;
 import funkin.game.data.Section.SwagSection;
 
-import funkin.editors.widget.*;
+import funkin.ui.widget.*;
 
 @:access(flixel.sound.FlxSound._sound)
 @:access(openfl.media.Sound.__buffer)

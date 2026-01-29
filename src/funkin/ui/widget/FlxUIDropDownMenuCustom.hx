@@ -1,4 +1,4 @@
-package funkin.editors.widget;
+package funkin.ui.widget;
 
 import flash.geom.Rectangle;
 import flixel.addons.ui.interfaces.IFlxUIClickable;

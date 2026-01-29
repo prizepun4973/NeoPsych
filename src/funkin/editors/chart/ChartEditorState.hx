@@ -40,12 +40,12 @@ import Conductor.BPMChangeEvent;
 
 import funkin.editors.chart.element.*;
 import funkin.editors.chart.action.*;
-import funkin.editors.ui.widget.*;
-import funkin.editors.ui.*;
+import funkin.ui.widget.*;
+import funkin.ui.*;
 
 using StringTools;
 
-class ChartEditorState extends funkin.editors.ui.EditorState {
+class ChartEditorState extends UIState {
     public static var GRID_SIZE:Int = 40;
     public static var Y_OFFSET:Int = 360;
     public static var INSTANCE:ChartEditorState;
@@ -104,12 +104,11 @@ class ChartEditorState extends funkin.editors.ui.EditorState {
         data = [];
     }
 
-    public static function canInput() {
+    public function canInput() {
         return 
             FlxG.mouse.y > 32 && 
             FlxG.mouse.y < FlxG.height - bottomHeight && 
-            haxe.ui.focus.FocusManager.instance.focus == null && 
-            !haxe.ui.core.Screen.instance.hasSolidComponentUnderPoint(FlxG.mouse.x, FlxG.mouse.y)
+            !tab.isFocused()
         ;
     }
     
@@ -582,8 +581,6 @@ class ChartEditorState extends funkin.editors.ui.EditorState {
         crosshair = new Crosshair();
         hudGroup.add(crosshair);
         
-        hudGroup.add(haxe.ui.ComponentBuilder.fromFile('art/ui/chart-editor/main-view.xml'));
-        
         var bottomHeight:Int = 20;
         hudGroup.add(new FlxSprite(0, FlxG.height - bottomHeight).makeGraphic(FlxG.width, bottomHeight, 0xFF3D3F41));
         
@@ -592,6 +589,46 @@ class ChartEditorState extends funkin.editors.ui.EditorState {
         textPanel.wordWrap = false;
         textPanel.autoSize = true;
         hudGroup.add(textPanel);
+
+        tab = new UIState.Tabs(this, 
+            ['File', 'Edit', 'Help'], [
+
+            ['Edit Chart Data', 'Save', 'Save Event', 'Save As', 'Save Event As', 'Reload Audio', 'Reload Chart', 'Load Events', 'Exit'], 
+            ['Go To', 'Swap', 'Duet', 'Mirror', 'Clear Section', 'Clear Notes', 'Clear Events'],
+            ['Instructions']
+        ]);
+
+        tab.onClick = function (column:Int, line:Int) {
+            switch (column) {
+                case 0:
+                    switch (line) {
+                        case 0: // Edit Chart Data
+                        case 1: // Save
+                        case 2: // Save Event
+                        case 3: // Save As
+                            if(_song.events != null && _song.events.length > 1) _song.events.sort(CoolUtil.sortByTime);
+
+                            var data:String = Json.stringify({"song": _song}, "\t");
+                            _file = new FileReference();
+                            _file.addEventListener(Event.COMPLETE, onSaveComplete);
+                            _file.addEventListener(Event.CANCEL, onSaveCancel);
+                            _file.addEventListener(IOErrorEvent.IO_ERROR, onSaveError);
+                            _file.save(data, '${Paths.formatToSongPath(_song.song)}.json');
+                        case 4: // Save Event As
+                            if(_song.events != null && _song.events.length > 1) _song.events.sort(CoolUtil.sortByTime);
+
+                                var data:String = Json.stringify({"song": { events: _song.events }}, "\t");
+
+                                if ((data != null) && (data.length > 0)) {
+                                    _file = new FileReference();
+                                    _file.addEventListener(Event.COMPLETE, onSaveComplete);
+                                    _file.addEventListener(Event.CANCEL, onSaveCancel);
+                                    _file.addEventListener(IOErrorEvent.IO_ERROR, onSaveError);
+                                    _file.save(data.trim(), "events.json");
+                                }
+                            }
+            }
+        };
 
         updateCurSec();
 
@@ -622,7 +659,6 @@ class SelectIndicator extends FlxSprite {
         y = target.y + ChartEditorState.GRID_SIZE * 1.5;
     }
 }
-
 class Crosshair extends FlxSprite {
     public var target:GuiElement;
     public var chained:Bool = true;
@@ -650,7 +686,7 @@ class Crosshair extends FlxSprite {
             FlxG.mouse.x < editor.gridBG.x + editor.gridBG.width && 
             mouseStrumTime >= 0 && 
             mouseStrumTime <= FlxG.sound.music.length && 
-            ChartEditorState.canInput();
+            ChartEditorState.INSTANCE.canInput();
 
         var anyHovered = false;
         editor.renderNotes.forEachAlive(function (sprite:FlxSprite) {

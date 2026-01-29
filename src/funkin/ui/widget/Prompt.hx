@@ -1,4 +1,4 @@
-package funkin.editors.widget;
+package funkin.ui.widget;
 import flixel.*;
 import flixel.FlxSubState;
 import flixel.addons.ui.FlxUIButton;
