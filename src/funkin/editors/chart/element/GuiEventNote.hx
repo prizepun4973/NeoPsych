@@ -10,8 +10,6 @@ class GuiEventNote extends GuiElement {
     public function new(pushData:Bool, strumTime:Float, events:Array<Array<String>>) {
         super(strumTime);
 
-        this.events = events;
-
         if (pushData) {
             ChartEditorState.data.push([
                 'strumTime' => strumTime,
@@ -37,6 +35,8 @@ class GuiEventNote extends GuiElement {
     }
 
     override function updatePos() {
+        updateField('events');
+
         x = ChartEditorState.INSTANCE.nextGridBG.x - ChartEditorState.GRID_SIZE * 2.5 + 2;
         y = (ChartEditorState.Y_OFFSET - ChartEditorState.GRID_SIZE * 1.5 + 2) - ((Conductor.songPosition - ChartEditorState.calcY(strumTime)) * ChartEditorState.GRID_SIZE / Conductor.crochet * 4);
 

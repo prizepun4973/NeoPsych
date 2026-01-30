@@ -17,8 +17,6 @@ class GuiNote extends GuiElement{
         super(strumTime);
 
         var parent = ChartEditorState.INSTANCE.renderNotes;
-        this.noteData = noteData;
-        this.susLength = susLength;
 
         if (pushData) {
             ChartEditorState.data.push([
@@ -64,6 +62,10 @@ class GuiNote extends GuiElement{
 
     override function updatePos() {        
         var crochet:Float = (60 / Conductor.getBPMFromSeconds(Conductor.songPosition).bpm) * 1000;
+
+        updateField('noteData');
+        updateField('susLength');
+        updateField('noteType');
 
         x =  ChartEditorState.INSTANCE.nextGridBG.x - ChartEditorState.GRID_SIZE * 2.5 + (noteData + 1) * ChartEditorState.GRID_SIZE + 2;
         y = (ChartEditorState.Y_OFFSET - ChartEditorState.GRID_SIZE * 1.5) - ((Conductor.songPosition - ChartEditorState.calcY(strumTime)) / crochet * 4 * ChartEditorState.GRID_SIZE);

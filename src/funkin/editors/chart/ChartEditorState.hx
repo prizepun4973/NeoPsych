@@ -55,7 +55,7 @@ class ChartEditorState extends UIState {
     public static var data:Array<Map<String, Dynamic>> = [];
 
     public var paused:Bool = true;
-    public var beatSnap:Int = 32;
+    public static var beatSnap:Int = 32;
 
     // data
     public static var _song:SwagSong;
@@ -102,6 +102,7 @@ class ChartEditorState extends UIState {
         undos = [];
         redos = [];
         data = [];
+        beatSnap = 16;
     }
 
     public function canInput() {
@@ -391,6 +392,22 @@ class ChartEditorState extends UIState {
             }
         }
 
+        if (FlxG.keys.justPressed.E) {
+            var dataIDs:Array<Int> = [];
+            selectIndicator.forEachAlive(function (indicator:SelectIndicator) {
+                if (Std.isOfType(indicator.target, GuiNote)) dataIDs.push((cast (indicator.target, GuiNote)).dataID);
+            });
+            addAction(new LengthChangeAction(dataIDs, 1));
+        }
+
+        if (FlxG.keys.justPressed.Q) {
+            var dataIDs:Array<Int> = [];
+            selectIndicator.forEachAlive(function (indicator:SelectIndicator) {
+                if (Std.isOfType(indicator.target, GuiNote)) dataIDs.push((cast (indicator.target, GuiNote)).dataID);
+            });
+            addAction(new LengthChangeAction(dataIDs, -1));
+        }
+
         // wip
         if (FlxG.keys.anyJustPressed(ClientPrefs.copyKey(ClientPrefs.keyBinds.get('debug_1')))) {
             funkin.component.MusicBeatState.switchState(new funkin.editors.ChartingState());
@@ -677,7 +694,7 @@ class Crosshair extends FlxSprite {
         var mouseStrumTime:Float = ChartEditorState.getMousePos();
         var GRID_SIZE = ChartEditorState.GRID_SIZE;
 
-        chainedMousePos = Conductor.getBPMFromSeconds(mouseStrumTime).songTime + Math.floor((mouseStrumTime - Conductor.getBPMFromSeconds(mouseStrumTime).songTime) / Conductor.getCrochetAtTime(mouseStrumTime) / 4 * editor.beatSnap) * Conductor.getCrochetAtTime(mouseStrumTime) * 4 / editor.beatSnap;
+        chainedMousePos = Conductor.getBPMFromSeconds(mouseStrumTime).songTime + Math.floor((mouseStrumTime - Conductor.getBPMFromSeconds(mouseStrumTime).songTime) / Conductor.getCrochetAtTime(mouseStrumTime) / 4 * ChartEditorState.beatSnap) * Conductor.getCrochetAtTime(mouseStrumTime) * 4 / ChartEditorState.beatSnap;
         x = editor.gridBG.x + Math.floor((FlxG.mouse.x - editor.gridBG.x) / GRID_SIZE) * GRID_SIZE;
         y = chained? ChartEditorState.Y_OFFSET - (Conductor.songPosition - ChartEditorState.calcY(chainedMousePos)) * GRID_SIZE / Conductor.crochet * 4
          : FlxG.mouse.y - height / 2;
@@ -691,7 +708,7 @@ class Crosshair extends FlxSprite {
         var anyHovered = false;
         editor.renderNotes.forEachAlive(function (sprite:FlxSprite) {
             if (Std.isOfType(sprite, GuiElement)) {
-                var hitboxScale = 16 / editor.beatSnap * ChartEditorState.GRID_SIZE;
+                var hitboxScale = 16 / ChartEditorState.beatSnap * ChartEditorState.GRID_SIZE;
                 var element:GuiElement = cast (sprite, GuiElement);
                 var x1:Float = element.x + GRID_SIZE * 1.5 - 2;
                 var y1:Float = element.y + GRID_SIZE * 1.5;
@@ -719,9 +736,17 @@ class GuiElement extends FlxSprite {
         this.strumTime = strumTime;
     }
 
+    function updateField(name:String) {
+        Reflect.setProperty(this, name, ChartEditorState.data[dataID].get(name));
+    }
+
     override function update(elapsed:Float) {
         ChartEditorState.INSTANCE.updateCurSec();
         updatePos();
+        if (ChartEditorState.data[dataID] != null) {
+            var result:Null<Float> = ChartEditorState.data[dataID].get('strumTime');
+            if (result != null) strumTime = result;
+        }
         super.update(elapsed);
     }
 

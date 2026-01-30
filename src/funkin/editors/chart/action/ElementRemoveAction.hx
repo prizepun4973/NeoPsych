@@ -26,8 +26,13 @@ class ElementRemoveAction extends ChartEditorState.EditorAction {
             editor.renderNotes.forEach(function (spr:FlxSprite) {
                 if (Std.isOfType(spr, GuiElement)) {
                     var element:GuiElement = cast (spr, GuiElement);
-                    if (((Std.isOfType(element, GuiNote) && ChartEditorState.data[i].exists('noteData')) || (Std.isOfType(element, GuiEventNote) && !ChartEditorState.data[i].exists('noteData')))
-                        && element.strumTime == ChartEditorState.data[i].get('strumTime')) editor.removeElement(element);
+                    if (datas.contains(element.dataID)) {
+                        if (Std.isOfType(spr, GuiNote)) {
+                            var note = cast (spr, GuiNote);
+                            editor.renderNotes.remove(note.susTail);
+                        }
+                        editor.removeElement(element);
+                    }
                 }
             });
         }
