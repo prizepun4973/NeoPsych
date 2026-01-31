@@ -3079,13 +3079,12 @@ class PlayState extends MusicBeatState {
 		for (lua in luaArray) {
 			lua.call('onDestroy', []);
 			lua.stop();
+			if(lua.hscript != null) lua.hscript = null;
 		}
 		luaArray = [];
 
 		callHScript('destroy', []);
 		hscripts = [];
-
-		if(FunkinLua.hscript != null) FunkinLua.hscript = null;
 
 		if(!ClientPrefs.controllerMode)
 		{

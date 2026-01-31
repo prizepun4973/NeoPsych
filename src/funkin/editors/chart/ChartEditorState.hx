@@ -88,6 +88,7 @@ class ChartEditorState extends UIState {
     public var crosshair:Crosshair;
 
     private var textPanel:FlxText;
+    private var textPanel1:FlxText;
 
     private var songPos(get, never):Float;
     function get_songPos():Float {
@@ -420,9 +421,8 @@ class ChartEditorState extends UIState {
         sectionStartLine.y = gridBG.y - sectionStartLine.height / 2;
         sectionStopLine.y = Y_OFFSET - (songPos - nextUpdateTime) * GRID_SIZE / Conductor.crochet * 4 - sectionStopLine.height / 2;
 
-        textPanel.text = 
-            FlxStringUtil.formatTime(Conductor.songPosition / 1000, true) + " / " + FlxStringUtil.formatTime(FlxG.sound.music.length / 1000, true) +
-            "                       Section: " + curSec + " (Beats: " + _song.notes[curSec].sectionBeats + ", BPM: " + sectionBPM[curSec] + ")" + 
+        textPanel.text = FlxStringUtil.formatTime(Conductor.songPosition / 1000, true) + " / " + FlxStringUtil.formatTime(FlxG.sound.music.length / 1000, true);
+        textPanel1.text = "                       Section: " + curSec + " (Beats: " + _song.notes[curSec].sectionBeats + ", BPM: " + sectionBPM[curSec] + ")" + 
 		    " Beat: " + curBeat + " | Step: " + curStep + 
             " (" + Std.string(FlxMath.roundDecimal(Conductor.songPosition / 1000, 2)) + ")";
     }
@@ -602,12 +602,18 @@ class ChartEditorState extends UIState {
         hudGroup.add(new FlxSprite(0, FlxG.height - bottomHeight).makeGraphic(FlxG.width, bottomHeight, 0xFF3D3F41));
         
         textPanel = new FlxText(2, FlxG.height - bottomHeight + 1, 0, "hi", 12);
-        textPanel.setFormat(Paths.font("vcr.ttf", false), 16, FlxColor.WHITE, FlxTextAlign.LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+        textPanel.setFormat(Paths.font("vcr.ttf", false), 16, FlxColor.WHITE, LEFT);
         textPanel.wordWrap = false;
         textPanel.autoSize = true;
         hudGroup.add(textPanel);
 
-        tab = new UIState.Tabs(this, 
+        textPanel1 = new FlxText(140, FlxG.height - bottomHeight + 1, 0, "hi", 12);
+        textPanel1.setFormat(Paths.font("vcr.ttf", false), 16, FlxColor.WHITE, LEFT);
+        textPanel1.wordWrap = false;
+        textPanel1.autoSize = true;
+        hudGroup.add(textPanel1);
+
+        tab = new UIState.Tabs(this,
             ['File', 'Edit', 'Help'], [
 
             ['Edit Chart Data', 'Save', 'Save Event', 'Save As', 'Save Event As', 'Reload Audio', 'Reload Chart', 'Load Events', 'Exit'], 

@@ -75,7 +75,7 @@ class FunkinLua
 	public var scriptName:String = '';
 	public var closed:Bool = false;
 
-	public static var hscript:funkin.jit.script.HScript = null;
+	public var hscript:funkin.jit.script.HScript = null;
 
 	public function new(script:String)
 	{

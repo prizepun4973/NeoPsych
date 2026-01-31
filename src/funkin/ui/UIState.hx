@@ -4,7 +4,6 @@ import flixel.FlxSprite;
 import flixel.group.FlxGroup.FlxTypedGroup;
 import flixel.FlxG;
 import flixel.text.FlxText;
-import flixel.util.FlxColor;
 
 class UIState extends funkin.jit.InjectedState{
     public var hudGroup:FlxTypedGroup<FlxSprite> = new FlxTypedGroup();
@@ -38,16 +37,16 @@ class Tabs {
     public var onClick:(Int, Int) -> Void = function (a:Int, b:Int) { trace(a + ' ' + b); };
     
     public function new(editor:funkin.ui.UIState, tabs:Array<String>, tabListOptions:Array<Array<String>>) {
-        editor.hudGroup.add(new FlxSprite(0, 0).makeGraphic(FlxG.width, 20, 0xC8d3d3d3));
+        editor.hudGroup.add(new FlxSprite(0, 0).makeGraphic(FlxG.width, 20, 0xFF3D3F41));
 
         var widthSum:Float = 0;
         for (i in 0...tabs.length) {
-            var text = new FlxText(widthSum + 2, 0 + 4, 400, tabs[i], 12);
+            var text = new FlxText(widthSum + 2, 4, 400, tabs[i], 12);
             text.wordWrap = false;
             text.autoSize = true;
-            text.setFormat(Paths.font("vcr.ttf"), 12, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+            text.setFormat(Paths.font("vcr.ttf"), 12, 0xFFE0E0E0, LEFT);
             texts.push(text);
-            var tab = new FlxSprite(widthSum, 0).makeGraphic(Std.int(4 + text.width), 20, 0xFFd3d3d3);
+            var tab = new FlxSprite(widthSum, 0).makeGraphic(Std.int(4 + text.width), 20, 0xFFFFFFFF);
             bg.push(tab);
 
             editor.hudGroup.add(tab);
@@ -56,7 +55,7 @@ class Tabs {
             var tabList:TabList = new TabList(editor, this, widthSum, 20, tabListOptions[i]);
             tabLists.push(tabList);
 
-            widthSum += text.width + 5;
+            widthSum += text.width + 4;
         }
     }
 
@@ -76,6 +75,8 @@ class Tabs {
             tabLists[i].update(elapsed);
 
             var hovering:Bool = FlxG.mouse.x > widthSum && FlxG.mouse.x < widthSum + bg[i].width && FlxG.mouse.y < 20;
+
+            bg[i].color = hovering ? 0xFF415982 : 0xFF3D3F41;
 
             if (FlxG.mouse.justReleased) {
                 if (hovering) tabLists[i].visible = !tabLists[i].visible;
@@ -120,7 +121,7 @@ class TabList {
             var text = new FlxText(X + 2, Y + (textHeight + 2) * i + 2, 400, options[i], 12);
             text.wordWrap = false;
             text.autoSize = true;
-            text.setFormat(Paths.font("vcr.ttf"), 12, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+            text.setFormat(Paths.font("vcr.ttf"), 12, 0xFFFFFFFF, LEFT);
             texts.push(text);
 
             if (listWidth < text.width) listWidth = text.width;
@@ -129,8 +130,8 @@ class TabList {
             editor.hudGroup.add(text);
         }
         
-        bg.makeGraphic(Math.ceil(listWidth + 4), Math.ceil(options.length * (textHeight + 2)));
-        indicator.makeGraphic(Math.ceil(listWidth + 4), Math.ceil(textHeight + 2), 0xFF00AFFF);
+        bg.makeGraphic(Math.ceil(listWidth + 4), Math.ceil(options.length * (textHeight + 2)), 0xFF3D3F41);
+        indicator.makeGraphic(Math.ceil(listWidth + 4), Math.ceil(textHeight + 2), 0xFF415982);
     }
 
     public function isHovering() {
