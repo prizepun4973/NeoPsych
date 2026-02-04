@@ -87,6 +87,8 @@ class ChartEditorState extends UIState {
     private var sectionStopLine:FlxSprite;
     public var crosshair:Crosshair;
 
+    public var lastTarget:GuiElement = null;
+
     private var textPanel:FlxText;
     private var textPanel1:FlxText;
 

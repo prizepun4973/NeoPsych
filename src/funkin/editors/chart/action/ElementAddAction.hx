@@ -22,6 +22,8 @@ class ElementAddAction extends ChartEditorState.EditorAction {
     }
 
     override function redo() {
+        var nextTarget:ChartEditorState.GuiElement = null;
+
         if (datas.length > 0) {
             for (i in datas) {
                 var data = ChartEditorState.data[i];
@@ -31,20 +33,34 @@ class ElementAddAction extends ChartEditorState.EditorAction {
                     note.noteType = data.get('noteType');
                     note.dataID = i;
                     editor.addElement(note);
+                    if (nextTarget == null) nextTarget = note;
                 } else {
                     var event:GuiEventNote = new GuiEventNote(false, data.get('strumTime'), []);
                     event.events = data.get('events');
                     event.dataID = i;
                     editor.addElement(event);
+                    if (nextTarget == null) nextTarget = event;
                 }
             }
         }
         else {
             for (i in elements) {
                 datas.push(i.dataID);
+                if (nextTarget == null) {
+                    nextTarget = i;
+                    ChartEditorState.data[i.dataID].set('wasSelected', true);
+                }
                 editor.addElement(i);
             }
         }
+
+        editor.selectIndicator.forEachAlive(function (indicator:SelectIndicator) {
+            if (indicator.target == editor.lastTarget) {
+                editor.selectIndicator.remove(indicator);
+                ChartEditorState.data[indicator.target.dataID].set('wasSelected', false);
+            }
+        });
+        editor.lastTarget = nextTarget;
     }
 
     override function undo() {
