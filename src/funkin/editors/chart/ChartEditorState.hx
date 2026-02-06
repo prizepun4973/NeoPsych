@@ -437,7 +437,7 @@ class ChartEditorState extends UIState {
 
     function actionListener() {
         if (crosshair.visible) {
-            if (FlxG.mouse.pressed && !FlxG.keys.pressed.CONTROL && !FlxG.keys.pressed.SHIFT && crosshair.target == null && paused) {
+            if (FlxG.mouse.pressed && !FlxG.keys.pressed.CONTROL && !FlxG.keys.pressed.SHIFT && crosshair.target == null) {
                 if (FlxG.mouse.x > gridBG.x) {
                     addAction(new ElementAddAction([
                         new GuiNote(
@@ -819,9 +819,8 @@ class Crosshair extends FlxSprite {
         var mouseStrumTime:Float = getMousePos();
         var GRID_SIZE = ChartEditorState.GRID_SIZE;
 
-        var chainedMousePos = Conductor.getBPMFromSeconds(mouseStrumTime).songTime + Math.floor((mouseStrumTime - Conductor.getBPMFromSeconds(mouseStrumTime).songTime) / Conductor.getCrochetAtTime(mouseStrumTime) / 4 * ChartEditorState.beatSnap) * Conductor.getCrochetAtTime(mouseStrumTime) * 4 / ChartEditorState.beatSnap;
         x = editor.gridBG.x + Math.floor((FlxG.mouse.x - editor.gridBG.x) / GRID_SIZE) * GRID_SIZE;
-        y = ChartEditorState.Y_OFFSET - (Conductor.songPosition - ChartEditorState.calcY(chainedMousePos)) * GRID_SIZE / Conductor.crochet * 4;
+        y = ChartEditorState.Y_OFFSET - (Conductor.songPosition - ChartEditorState.calcY(getMousePos())) * GRID_SIZE / Conductor.crochet * 4;
         visible = 
             FlxG.mouse.x >= editor.gridBG.x - ChartEditorState.GRID_SIZE && 
             FlxG.mouse.x < editor.gridBG.x + editor.gridBG.width && 
