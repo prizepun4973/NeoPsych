@@ -10,7 +10,7 @@ import funkin.component.ui.*;
 
 import lime.ui.*;
 
-class UIState extends funkin.jit.InjectedSubState {
+class UISubState extends funkin.jit.InjectedSubState {
     var textBoxs:Array<TextBoxWidget> = [];
 
     var defaultGroup:FlxTypedGroup<FlxBasic> = new FlxTypedGroup<FlxBasic>();
@@ -69,7 +69,7 @@ class UIState extends funkin.jit.InjectedSubState {
             default:
                 return;
             case ESCAPE:
-                var canExit:Bool = false;
+                var canExit:Bool = !(textBoxs.length > 0);
                 for (textBox in textBoxs) {
                     if (!textBox.editing) canExit = true;
                 }

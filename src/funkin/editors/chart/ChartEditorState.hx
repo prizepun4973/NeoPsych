@@ -40,6 +40,7 @@ import Conductor.BPMChangeEvent;
 
 import funkin.editors.chart.element.*;
 import funkin.editors.chart.action.*;
+import funkin.editors.chart.window.*;
 import funkin.ui.widget.*;
 import funkin.ui.*;
 
@@ -515,14 +516,11 @@ class ChartEditorState extends UIState {
         }
     }
 
-    function tabAction(column:Int, line:Int) {
+    function tabAction(column:String, line:String) {
         switch (column) {
-            case 0:
+            case "File":
                 switch (line) {
-                    case 0: // Edit Chart Data
-                    case 1: // Save
-                    case 2: // Save Event
-                    case 3: // Save As
+                    case "Save As":
                         if(_song.events != null && _song.events.length > 1) _song.events.sort(CoolUtil.sortByTime);
 
                         var data:String = Json.stringify({"song": _song}, "\t");
@@ -531,7 +529,7 @@ class ChartEditorState extends UIState {
                         _file.addEventListener(Event.CANCEL, onSaveCancel);
                         _file.addEventListener(IOErrorEvent.IO_ERROR, onSaveError);
                         _file.save(data, '${Paths.formatToSongPath(_song.song)}.json');
-                    case 4: // Save Event As
+                    case "Save Event As":
                         if(_song.events != null && _song.events.length > 1) _song.events.sort(CoolUtil.sortByTime);
 
                             var data:String = Json.stringify({"song": { events: _song.events }}, "\t");
@@ -544,6 +542,11 @@ class ChartEditorState extends UIState {
                                 _file.save(data.trim(), "events.json");
                             }
                         }
+            case "Edit":
+                switch (line) {
+                    case "Edit Current Section":
+                        openSubState(new SectionWindow());
+                }
         }
     }
 
@@ -697,11 +700,11 @@ class ChartEditorState extends UIState {
             ['File', 'Edit', 'Help'], [
 
             ['Edit Chart Data', 'Save', 'Save Event', 'Save As', 'Save Event As', 'Reload Audio', 'Reload Chart', 'Load Events', 'Exit'], 
-            ['Go To', 'Swap', 'Duet', 'Mirror', 'Clear Section', 'Clear Notes', 'Clear Events'],
+            ['Edit Current Section', 'Edit Selected Notes', 'Go To', 'Swap', 'Duet', 'Mirror', 'Clear Section', 'Clear Notes', 'Clear Events'],
             ['Instructions']
         ]);
 
-        tab.onClick = function (column:Int, line:Int) {
+        tab.onClick = function (column:String, line:String) {
             tabAction(column, line);
         };
 

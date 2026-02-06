@@ -34,7 +34,7 @@ class Tabs {
     public var texts:Array<FlxText> = [];
     public var tabLists:Array<TabList> = [];
 
-    public var onClick:(Int, Int) -> Void = function (a:Int, b:Int) { trace(a + ' ' + b); };
+    public var onClick:(String, String) -> Void = function (a:String, b:String) { trace(a + ' ' + b); };
     
     public function new(editor:funkin.ui.UIState, tabs:Array<String>, tabListOptions:Array<Array<String>>) {
         editor.hudGroup.add(new FlxSprite(0, 0).makeGraphic(FlxG.width, 20, 0xFF3D3F41));
@@ -97,7 +97,7 @@ class TabList {
 
     public var bg:FlxSprite;
     public var indicator:FlxSprite;
-    public var texts:Array<FlxSprite> = [];
+    public var texts:Array<FlxText> = [];
     var textHeight:Float = 0;
 
     public var visible:Bool = false;
@@ -146,6 +146,6 @@ class TabList {
 
         indicator.y = y + Math.floor((FlxG.mouse.y - y) / (textHeight + 2)) * (textHeight + 2);
 
-        if (FlxG.mouse.justReleased && visible && isHovering()) parent.onClick(parent.tabLists.indexOf(this), Math.floor((FlxG.mouse.y - y) / (textHeight + 2)));
+        if (FlxG.mouse.justReleased && visible && isHovering()) parent.onClick(parent.texts[parent.tabLists.indexOf(this)].text, texts[Math.floor((FlxG.mouse.y - y) / (textHeight + 2))].text);
     }
 }
