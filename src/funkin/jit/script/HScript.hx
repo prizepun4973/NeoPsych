@@ -116,7 +116,7 @@ class HScript extends Script {
 	}
 
 	// https://github.com/CodenameCrew/CodenameEngine
-	override function call(funcName:String, args:Array<Dynamic>) {
+	override function call(funcName:String, args:Array<Dynamic>):Dynamic {
 		if (interp == null) return null;
 		if (!interp.variables.exists(funcName)) return null;
 

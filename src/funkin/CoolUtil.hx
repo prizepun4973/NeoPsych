@@ -182,6 +182,23 @@ class CoolUtil
 		return FlxSort.byValues(FlxSort.ASCENDING, Obj1[0], Obj2[0]);
 	}
 
+	public static function parseColor(colorString:String):FlxColor {
+		if (!StringTools.startsWith(colorString, '0x')) colorString = 'FF' + colorString;
+		colorString = StringTools.replace(colorString, '0x', '');
+
+		var parsed:Array<Int> = [];
+		var lastString:String = '';
+		for (i in 0...colorString.length) {
+			lastString += colorString.charAt(i);
+			if (i % 2 == 0 && i > 0) {
+				parsed.push(Std.parseInt('0x' + lastString));
+				lastString = '';
+			}
+		}
+
+		return FlxColor.fromRGB(parsed[1], parsed[2], parsed[3], parsed[0]);
+	}
+
 	public static function getStateByString(state:String):FlxState {
 		switch(state) {
 			default:

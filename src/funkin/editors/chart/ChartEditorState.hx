@@ -515,6 +515,38 @@ class ChartEditorState extends UIState {
         }
     }
 
+    function tabAction(column:Int, line:Int) {
+        switch (column) {
+            case 0:
+                switch (line) {
+                    case 0: // Edit Chart Data
+                    case 1: // Save
+                    case 2: // Save Event
+                    case 3: // Save As
+                        if(_song.events != null && _song.events.length > 1) _song.events.sort(CoolUtil.sortByTime);
+
+                        var data:String = Json.stringify({"song": _song}, "\t");
+                        _file = new FileReference();
+                        _file.addEventListener(Event.COMPLETE, onSaveComplete);
+                        _file.addEventListener(Event.CANCEL, onSaveCancel);
+                        _file.addEventListener(IOErrorEvent.IO_ERROR, onSaveError);
+                        _file.save(data, '${Paths.formatToSongPath(_song.song)}.json');
+                    case 4: // Save Event As
+                        if(_song.events != null && _song.events.length > 1) _song.events.sort(CoolUtil.sortByTime);
+
+                            var data:String = Json.stringify({"song": { events: _song.events }}, "\t");
+
+                            if ((data != null) && (data.length > 0)) {
+                                _file = new FileReference();
+                                _file.addEventListener(Event.COMPLETE, onSaveComplete);
+                                _file.addEventListener(Event.CANCEL, onSaveCancel);
+                                _file.addEventListener(IOErrorEvent.IO_ERROR, onSaveError);
+                                _file.save(data.trim(), "events.json");
+                            }
+                        }
+        }
+    }
+
     override function create() {
         super.create();
 
@@ -670,35 +702,7 @@ class ChartEditorState extends UIState {
         ]);
 
         tab.onClick = function (column:Int, line:Int) {
-            switch (column) {
-                case 0:
-                    switch (line) {
-                        case 0: // Edit Chart Data
-                        case 1: // Save
-                        case 2: // Save Event
-                        case 3: // Save As
-                            if(_song.events != null && _song.events.length > 1) _song.events.sort(CoolUtil.sortByTime);
-
-                            var data:String = Json.stringify({"song": _song}, "\t");
-                            _file = new FileReference();
-                            _file.addEventListener(Event.COMPLETE, onSaveComplete);
-                            _file.addEventListener(Event.CANCEL, onSaveCancel);
-                            _file.addEventListener(IOErrorEvent.IO_ERROR, onSaveError);
-                            _file.save(data, '${Paths.formatToSongPath(_song.song)}.json');
-                        case 4: // Save Event As
-                            if(_song.events != null && _song.events.length > 1) _song.events.sort(CoolUtil.sortByTime);
-
-                                var data:String = Json.stringify({"song": { events: _song.events }}, "\t");
-
-                                if ((data != null) && (data.length > 0)) {
-                                    _file = new FileReference();
-                                    _file.addEventListener(Event.COMPLETE, onSaveComplete);
-                                    _file.addEventListener(Event.CANCEL, onSaveCancel);
-                                    _file.addEventListener(IOErrorEvent.IO_ERROR, onSaveError);
-                                    _file.save(data.trim(), "events.json");
-                                }
-                            }
-            }
+            tabAction(column, line);
         };
 
         updateCurSec();
