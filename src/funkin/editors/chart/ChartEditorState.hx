@@ -541,7 +541,7 @@ class ChartEditorState extends UIState {
                     var elementData = data[i];
 
                     var anchor:Float = elementData.get('strumTime') + change;
-                    if (anchor >= 0) {
+                    if (anchor >= 0 && anchor <= FlxG.sound.music.length) {
                         if (elementData.get('events') == null) {
                             toAdd.push(new GuiNote(
                                 true,
