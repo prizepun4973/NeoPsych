@@ -92,6 +92,9 @@ class GuiNote extends GuiElement{
                 playHitsound = false;
                 FlxG.sound.play(Paths.sound('hitSound'));
             }
+
+            if ((!ChartEditorState.hitsoundP1 && noteData > 3) || (!ChartEditorState.hitsoundP2 && noteData < 4))
+                playHitsound = false;
         }
     }
 }
