@@ -57,6 +57,7 @@ class MoveAction extends EditorAction {
         for (i in datas) {
             var data = ChartEditorState.data[i];
             data.set('noteData', data.get('noteData') - deltaData);
+            data.set('strumTime', data.get('strumTime') - deltaTime);
 
             if (removed.contains(i)) {
                 var note:GuiNote = new GuiNote(false, data.get('strumTime'), data.get('noteData'), data.get('susLength'));
