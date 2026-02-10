@@ -9,6 +9,7 @@ class MoveAction extends EditorAction {
     public var datas:Array<Int> = [];
     public var targets:Array<GuiElement> = [];
     public var removed:Array<Int> = [];
+    public var dataPre:Array<Map<String, Dynamic>> = [];
     public var deltaTime:Float;
     public var deltaData:Int = 0;
 
@@ -17,12 +18,13 @@ class MoveAction extends EditorAction {
 
         this.targets = targets;
 
-        for (i in targets)
+        for (i in targets) {
             datas.push(i.dataID);
+            dataPre.push(ChartEditorState.data[i.dataID]);
+        }
 
-        deltaTime = editor.crosshair.dragTarget.strumTime - editor.crosshair.getMousePos();
+        deltaTime = editor.crosshair.getMousePos() - editor.crosshair.dragTarget.strumTime;
         if (Std.isOfType(editor.crosshair.dragTarget, GuiNote)) deltaData = Math.floor((FlxG.mouse.x - editor.gridBG.x) / ChartEditorState.GRID_SIZE) - (cast (editor.crosshair.dragTarget, GuiNote)).noteData;
-        trace(deltaData);
 
         redo();
     }
@@ -36,14 +38,13 @@ class MoveAction extends EditorAction {
             }
 
             data.set('strumTime', data.get('strumTime') + deltaTime);
+            data.set('noteData', data.get('noteData') + deltaData);
 
             if (data.get('events') == null) {
-                if (data.get('noteData') + deltaData < 0 || data.get('noteData') > 8) { // TODO: multikey mb
+                if (data.get('noteData') < 0 || data.get('noteData') > 7) { // TODO: multikey mb
                     remove(i);
                     continue;
                 }
-
-                data.set('noteData', data.get('noteData') + deltaData);
             }
 
             // editor.renderNotes.forEachAlive(function (spr:FlxSprite) {
@@ -55,26 +56,13 @@ class MoveAction extends EditorAction {
     override function undo() {
         for (i in datas) {
             var data = ChartEditorState.data[i];
-            data.set('strumTime', data.get('strumTime') - deltaTime);
-
-            if (data.get('events') == null)
-                data.set('noteData', data.get('noteData') - deltaData);
+            data.set('noteData', data.get('noteData') - deltaData);
 
             if (removed.contains(i)) {
-                if (data.get('events') == null)
-                    editor.addElement(new GuiNote(
-                        false,
-                        data.get('strumTime'),
-                        data.get('noteData'),
-                        data.get('susLength'),
-                        data.get('noteType')
-                    ));
-                else
-                    editor.addElement(new GuiEventNote(
-                        false,
-                        data.get('strumTime'),
-                        data.get('events')
-                    ));
+                var note:GuiNote = new GuiNote(false, data.get('strumTime'), data.get('noteData'), data.get('susLength'));
+                note.noteType = data.get('noteType');
+                note.dataID = i;
+                editor.addElement(note);
             }
         }
     }

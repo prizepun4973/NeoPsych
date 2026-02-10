@@ -167,7 +167,7 @@ class ChartEditorState extends UIState {
         renderNotes.remove(element);
     }
 
-    public function addElement(element:GuiElement, pushData:Bool = false) {
+    public function addElement(element:GuiElement) {
         renderNotes.add(element);
         if (data[element.dataID].exists('wasSelected')) if (data[element.dataID].get('wasSelected')) selectIndicator.add(new SelectIndicator(element));
     }

@@ -72,7 +72,7 @@ class Crosshair extends FlxSprite {
             dragTarget = target;
         
         if (FlxG.mouse.justReleased || FlxG.keys.justReleased.SHIFT) {
-            onDragFinished();
+            if (dragTarget != null) onDragFinished();
             dragTarget = null;
 
             offsetX = 0;
