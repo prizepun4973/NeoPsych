@@ -8,6 +8,7 @@ import flixel.text.FlxText;
 class UIState extends funkin.jit.InjectedState{
     public var hudGroup:FlxTypedGroup<FlxSprite> = new FlxTypedGroup();
     public var tab:Tabs;
+    public static var topHeight:Int = 20;
 
     override function new(script:String) {
         super(script);
@@ -37,7 +38,7 @@ class Tabs {
     public var onClick:(String, String) -> Void = function (a:String, b:String) { trace(a + ' ' + b); };
     
     public function new(editor:funkin.ui.UIState, tabs:Array<String>, tabListOptions:Array<Array<String>>) {
-        editor.hudGroup.add(new FlxSprite(0, 0).makeGraphic(FlxG.width, 20, 0xFF3D3F41));
+        editor.hudGroup.add(new FlxSprite(0, 0).makeGraphic(FlxG.width, UIState.topHeight, 0xFF3D3F41));
 
         var widthSum:Float = 0;
         for (i in 0...tabs.length) {
@@ -46,13 +47,13 @@ class Tabs {
             text.autoSize = true;
             text.setFormat(Paths.font("vcr.ttf"), 12, 0xFFE0E0E0, LEFT);
             texts.push(text);
-            var tab = new FlxSprite(widthSum, 0).makeGraphic(Std.int(4 + text.width), 20, 0xFFFFFFFF);
+            var tab = new FlxSprite(widthSum, 0).makeGraphic(Std.int(4 + text.width), UIState.topHeight, 0xFFFFFFFF);
             bg.push(tab);
 
             editor.hudGroup.add(tab);
             editor.hudGroup.add(text);
             
-            var tabList:TabList = new TabList(editor, this, widthSum, 20, tabListOptions[i]);
+            var tabList:TabList = new TabList(editor, this, widthSum, UIState.topHeight, tabListOptions[i]);
             tabLists.push(tabList);
 
             widthSum += text.width + 4;
@@ -65,7 +66,7 @@ class Tabs {
             if (tabLists[i].isHovering()) result = true;
         }
 
-        return result || FlxG.mouse.y < 20;
+        return result || FlxG.mouse.y < UIState.topHeight;
     }
 
     public function update(elapsed:Float) {
@@ -74,7 +75,7 @@ class Tabs {
         for (i in 0...bg.length) {
             tabLists[i].update(elapsed);
 
-            var hovering:Bool = FlxG.mouse.x > widthSum && FlxG.mouse.x < widthSum + bg[i].width && FlxG.mouse.y < 20;
+            var hovering:Bool = FlxG.mouse.x > widthSum && FlxG.mouse.x < widthSum + bg[i].width && FlxG.mouse.y < UIState.topHeight;
 
             bg[i].color = hovering ? 0xFF415982 : 0xFF3D3F41;
 

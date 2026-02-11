@@ -76,7 +76,7 @@ class ChartEditorState extends UIState {
     private var vocals:FlxSound = null;
 
     // graphics
-    public static var bottomHeight:Int = 20;
+    var bottomHeight:Int = 20;
 
     public static var lastPos:Float;
     public static var curSec:Int;
@@ -136,10 +136,6 @@ class ChartEditorState extends UIState {
             if (Std.isOfType(spr, GuiElement)) {
                 var element = cast (spr, GuiElement);
                 if (element.dataID == i) {
-                    if (Std.isOfType(spr, GuiNote)) {
-                        var note = cast (spr, GuiNote);
-                        renderNotes.remove(note.susTail);
-                    }
                     removeElement(element);
                 }
             }
@@ -171,6 +167,7 @@ class ChartEditorState extends UIState {
         });
 
         data[element.dataID].set('wasSelected', wasSelected);
+        element.destroy();
 
         renderNotes.remove(element);
     }
@@ -245,6 +242,11 @@ class ChartEditorState extends UIState {
             lastUpdateTime = nextUpdateTime;
             nextUpdateTime += _song.notes[curSec].sectionBeats * Conductor.crochet;
 
+            if (curSec < _song.notes.length)
+                sectionStopLine.color = _song.notes[curSec + 1].mustHitSection? FlxColor.fromRGB(49, 176, 209) : FlxColor.fromRGB(175, 102, 206);
+            
+            if (curSec > 0)
+                sectionStartLine.color = _song.notes[curSec - 1].mustHitSection? FlxColor.fromRGB(49, 176, 209) : FlxColor.fromRGB(175, 102, 206);
         }
         if (songPos < lastUpdateTime && songPos >= 0) {
             curSec--;
@@ -488,7 +490,7 @@ class ChartEditorState extends UIState {
                     canDrag = true;
                 }
                 else addAction(new ElementAddAction([new GuiEventNote(
-                        true, 
+                        null, 
                         crosshair.getMousePos(), 
                         [['Add Camera Zoom', '', '']])])
                     );  
@@ -560,7 +562,7 @@ class ChartEditorState extends UIState {
                             ));
                         } else {
                             toAdd.push(new GuiEventNote(
-                                true,
+                                null,
                                 anchor,
                                 elementData.get('events')
                             ));
@@ -795,7 +797,7 @@ class ChartEditorState extends UIState {
         add(hudGroup);
 
         for (event in _song.events) {
-            var guiEventNote:GuiEventNote = new GuiEventNote(true, event[0], event[1]);
+            var guiEventNote:GuiEventNote = new GuiEventNote(null, event[0], event[1]);
             renderNotes.add(guiEventNote);
         }
 
@@ -811,12 +813,16 @@ class ChartEditorState extends UIState {
             beatSplitLine.push(splitLine);
         }
 
-        sectionStartLine = new FlxSprite(0, Y_OFFSET).makeGraphic(GRID_SIZE * 8, 2, FlxColor.GREEN);
+        sectionStartLine = new FlxSprite(0, Y_OFFSET).makeGraphic(GRID_SIZE * 8, 2, FlxColor.WHITE);
         sectionStartLine.screenCenter(X);
         hudGroup.add(sectionStartLine);
 
-        sectionStopLine = new FlxSprite(0, Y_OFFSET).makeGraphic(GRID_SIZE * 8, 2, FlxColor.GREEN);
+        sectionStopLine = new FlxSprite(0, Y_OFFSET).makeGraphic(GRID_SIZE * 8, 2, FlxColor.WHITE);
         sectionStopLine.screenCenter(X);
+
+        if (curSec < _song.notes.length)
+            sectionStopLine.color = _song.notes[curSec + 1].mustHitSection? FlxColor.fromRGB(49, 176, 209) : FlxColor.fromRGB(175, 102, 206);
+
         hudGroup.add(sectionStopLine);
 
         conductorLine = new FlxSprite(0, Y_OFFSET).makeGraphic(GRID_SIZE * 10, 4, FlxColor.WHITE);
@@ -836,7 +842,6 @@ class ChartEditorState extends UIState {
         }
         hudGroup.add(crosshair);
         
-        var bottomHeight:Int = 20;
         hudGroup.add(new FlxSprite(0, FlxG.height - bottomHeight).makeGraphic(FlxG.width, bottomHeight, 0xFF3D3F41));
         
         textPanel = new FlxText(2, FlxG.height - bottomHeight + 1, 0, "hi", 12);
@@ -864,7 +869,7 @@ class ChartEditorState extends UIState {
             tabAction(column, line);
         };
 
-        hudGroup.add(new FlxSprite(nextGridBG.x, 20).makeGraphic(GRID_SIZE * 8, 114, 0x640F0F0F));
+        hudGroup.add(new FlxSprite(nextGridBG.x, funkin.ui.UIState.topHeight).makeGraphic(GRID_SIZE * 8, 114, 0x640F0F0F));
         iconP1 = new HealthIcon(_song.player1);
         iconP1.screenCenter(X);
         iconP1.x += 80;

@@ -87,14 +87,18 @@ class GuiNote extends GuiElement{
         susTail.setGraphicSize(susTail.width, ChartEditorState.GRID_SIZE * (susLength / crochet * 4 + 0.5)); // TODO: Fix this
 
         if (Conductor.songPosition <= strumTime) playHitsound = true;
-        else if (playHitsound) {
-            if ((ChartEditorState.hitsoundP1 && noteData > 3) || (ChartEditorState.hitsoundP2 && noteData < 4)) {
-                playHitsound = false;
-                FlxG.sound.play(Paths.sound('hitSound'));
-            }
+        else if ((ChartEditorState.hitsoundP1 && noteData > 3) || (ChartEditorState.hitsoundP2 && noteData < 4)) {
+            if (editor.paused) playHitsound = false;
 
-            if ((!ChartEditorState.hitsoundP1 && noteData > 3) || (!ChartEditorState.hitsoundP2 && noteData < 4))
+            if (playHitsound) {
                 playHitsound = false;
+                FlxG.sound.play(Paths.sound('hitSound'), 0.25);
+            }
         }
+    }
+
+    override function destroy() {
+        super.destroy();
+        editor.renderNotes.remove(susTail);
     }
 }

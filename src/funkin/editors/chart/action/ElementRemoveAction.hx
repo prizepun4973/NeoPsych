@@ -26,10 +26,6 @@ class ElementRemoveAction extends EditorAction {
                 if (Std.isOfType(spr, GuiElement)) {
                     var element:GuiElement = cast (spr, GuiElement);
                     if (datas.contains(element.dataID)) {
-                        if (Std.isOfType(spr, GuiNote)) {
-                            var note = cast (spr, GuiNote);
-                            editor.renderNotes.remove(note.susTail);
-                        }
                         editor.removeElement(element);
                     }
                 }
@@ -46,9 +42,7 @@ class ElementRemoveAction extends EditorAction {
                 note.dataID = i;
                 editor.addElement(note);
             } else {
-                var event:GuiEventNote = new GuiEventNote(false, data.get('strumTime'), []);
-                event.events = data.get('events');
-                event.dataID = i;
+                var event:GuiEventNote = new GuiEventNote(i, data.get('strumTime'), data.get('events'));
                 editor.addElement(event);
             }
         }
