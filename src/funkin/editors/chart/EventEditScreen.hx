@@ -27,16 +27,16 @@ class EventEditScreen extends funkin.ui.UISubState {
         for (i in casted)
             events.push(i);
 
-        titleTextBox = addTextList(640, 100, 100, events[curPage][0], [], function (textBox) {
+        titleTextBox = addTextList(640, 100, 300, events[curPage][0], [], function (textBox) {
             if (events.length > 0) events[curPage][0] = textBox.getText();
             if (buttons.length > 0) buttons[curPage].setText(textBox.getText());
         });
 
-        value1TextBox = addTextBox(640, 150, 100, events[curPage][1], function (textBox) {
+        value1TextBox = addTextBox(640, 150, 300, events[curPage][1], function (textBox) {
             if (events.length > 0) events[curPage][1] = textBox.getText();
         });
 
-        value2TextBox = addTextBox(640, 200, 100, events[curPage][2], function (textBox) {
+        value2TextBox = addTextBox(640, 200, 300, events[curPage][2], function (textBox) {
             if (events.length > 0) events[curPage][2] = textBox.getText();
         });
 
@@ -48,6 +48,16 @@ class EventEditScreen extends funkin.ui.UISubState {
                 curPage = i;
             }));
         }
+
+        addButton(45, 650, ' + ', function () {
+            events.push(['', '', '']);
+            buttons.push(addButton(45, 35 + (events.length - 1) * 27, events[events.length - 1][0], function () {
+                titleTextBox.setText(events[events.length - 1][0]);
+                value1TextBox.setText(events[events.length - 1][1]);
+                value2TextBox.setText(events[events.length - 1][2]);
+                curPage = events.length - 1;
+            }));
+        });
     }
 
     override function destroy() {

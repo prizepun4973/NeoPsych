@@ -35,6 +35,8 @@ class TextBoxWidget extends FlxSprite {
     override function update(elapsed:Float) {
         super.update(elapsed);
 
+        color = editing? 0xFF00FFFF : 0xFFFFFFFF;
+
         if (FlxG.mouse.justReleased) {
             if (!isHovering() && editing) onChange(this);
             editing = isHovering();
@@ -177,7 +179,7 @@ class TextBoxWidget extends FlxSprite {
         return Std.parseInt(getText());
     }
 
-    public function getFloat() {
+    public function getFloat():Dynamic {
         return Std.parseFloat(getText());
     }
 }
